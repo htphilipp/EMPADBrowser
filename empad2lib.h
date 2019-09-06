@@ -8,7 +8,7 @@
 #include <boost/iostreams/device/mapped_file.hpp>
 #include <string>
 #include <vector>
-//comment: Hugh Philipp Wrote this
+//comment: Hugh Philipp
 class Empad2
 {
 
