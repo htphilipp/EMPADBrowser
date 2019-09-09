@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include <QApplication>
+// Hugh Philipp 2019
 
 int main(int argc, char *argv[])
 {
