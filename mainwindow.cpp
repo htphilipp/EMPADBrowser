@@ -13,16 +13,20 @@ MainWindow::MainWindow(QWidget *parent) :
     combined = cv::Mat(128,128,CV_64F,cv::Scalar(0));
     dark = cv::Mat(128,128,CV_64F,cv::Scalar(0));
     scaledGain = cv::Mat(128,128,CV_64F,cv::Scalar(0));
+    results = cv::Mat(128,128,CV_64F,cv::Scalar(0));
 
     cv::namedWindow("analog", cv::WINDOW_NORMAL);
     cv::namedWindow("digital", cv::WINDOW_NORMAL);
     cv::namedWindow("combined",cv::WINDOW_NORMAL);
     cv::namedWindow("gain",cv::WINDOW_NORMAL);
+    cv::namedWindow("results",cv::WINDOW_NORMAL);
 
 
     cv::setMouseCallback("analog",&MainWindow::onMouseAna,this);
     cv::setMouseCallback("digital",&MainWindow::onMouseDig,this);
     cv::setMouseCallback("combined",&MainWindow::onMouseComb,this);
+    cv::setMouseCallback("results",&MainWindow::onMouseResults,this);
+    cv::setMouseCallback("gain",&MainWindow::onMouseGain,this);
 
     rawData = nullptr;
     rawBGData = nullptr;
@@ -31,6 +35,7 @@ MainWindow::MainWindow(QWidget *parent) :
     histAreaui = new HistogramAreaDialog(this);
     movDialog = new movieDialog(this);
     calcOffsets = new CalcDebounceOffsets(this);
+    sumFrames = new SumFramesDialog(this);
     offsets.clear();
 
     anaDisplayScale = ui->lineEdit_4->text().toDouble();
@@ -48,6 +53,8 @@ void MainWindow::onMouseAna(int evt, int x, int y, int flags, void *param)
     mainSub->ui->label_anaPix->setNum(mainSub->scaledAna.at<double>(y,x));
     mainSub->ui->label_digPix->setNum(mainSub->scaledDig.at<double>(y,x));
     mainSub->ui->label_comPix->setNum(mainSub->combined.at<double>(y,x));
+    mainSub->ui->label_gainPix->setNum(mainSub->scaledGain.at<double>(y,x));
+    mainSub->ui->label_resPix->setNum(mainSub->results.at<double>(y,x));
 
     mainSub->ui->label_18->setText("analog");
 }
@@ -62,6 +69,8 @@ void MainWindow::onMouseDig(int evt, int x, int y, int flags, void *param)
     mainSub->ui->label_anaPix->setNum(mainSub->scaledAna.at<double>(y,x));
     mainSub->ui->label_digPix->setNum(mainSub->scaledDig.at<double>(y,x));
     mainSub->ui->label_comPix->setNum(mainSub->combined.at<double>(y,x));
+    mainSub->ui->label_gainPix->setNum(mainSub->scaledGain.at<double>(y,x));
+    mainSub->ui->label_resPix->setNum(mainSub->results.at<double>(y,x));
 
     mainSub->ui->label_18->setText("digital");
 }
@@ -76,8 +85,42 @@ void MainWindow::onMouseComb(int evt, int x, int y, int flags, void *param)
     mainSub->ui->label_anaPix->setNum(mainSub->scaledAna.at<double>(y,x));
     mainSub->ui->label_digPix->setNum(mainSub->scaledDig.at<double>(y,x));
     mainSub->ui->label_comPix->setNum(mainSub->combined.at<double>(y,x));
+    mainSub->ui->label_gainPix->setNum(mainSub->scaledGain.at<double>(y,x));
+    mainSub->ui->label_resPix->setNum(mainSub->results.at<double>(y,x));
 
     mainSub->ui->label_18->setText("combined");
+}
+
+void MainWindow::onMouseResults(int evt, int x, int y, int flags, void *param)
+{
+    MainWindow *mainSub = (MainWindow*) param;  //using param pointer to "avoid" restrictions on static member functions.
+
+    mainSub->ui->label_13->setNum(x);
+    mainSub->ui->label_15->setNum(y);
+   // mainSub->ui->label_17->setNum(mainSub->combined.at<double>(y,x));
+    mainSub->ui->label_anaPix->setNum(mainSub->scaledAna.at<double>(y,x));
+    mainSub->ui->label_digPix->setNum(mainSub->scaledDig.at<double>(y,x));
+    mainSub->ui->label_comPix->setNum(mainSub->combined.at<double>(y,x));
+    mainSub->ui->label_gainPix->setNum(mainSub->scaledGain.at<double>(y,x));
+    mainSub->ui->label_resPix->setNum(mainSub->results.at<double>(y,x));
+
+    mainSub->ui->label_18->setText("results");
+}
+
+void MainWindow::onMouseGain(int evt, int x, int y, int flags, void *param)
+{
+    MainWindow *mainSub = (MainWindow*) param;  //using param pointer to "avoid" restrictions on static member functions.
+
+    mainSub->ui->label_13->setNum(x);
+    mainSub->ui->label_15->setNum(y);
+   // mainSub->ui->label_17->setNum(mainSub->combined.at<double>(y,x));
+    mainSub->ui->label_anaPix->setNum(mainSub->scaledAna.at<double>(y,x));
+    mainSub->ui->label_digPix->setNum(mainSub->scaledDig.at<double>(y,x));
+    mainSub->ui->label_comPix->setNum(mainSub->combined.at<double>(y,x));
+    mainSub->ui->label_gainPix->setNum(mainSub->scaledGain.at<double>(y,x));
+    mainSub->ui->label_resPix->setNum(mainSub->results.at<double>(y,x));
+
+    mainSub->ui->label_18->setText("gain");
 }
 
 
@@ -283,6 +326,8 @@ void MainWindow::updateDisplay()
         }
     }
 
+    cv::convertScaleAbs(results,adjMap,ui->lineEdit_resultsScale->text().toDouble());
+    cv::imshow("results",adjMap);
 
     except = cv::waitKey(1);
 
@@ -383,4 +428,14 @@ void MainWindow::on_actionSave_Video_triggered()
 void MainWindow::on_actionCalc_Debounce_Offsets_triggered()
 {
     calcOffsets->show();
+}
+
+void MainWindow::on_actionAdd_Frames_triggered()
+{
+    sumFrames->show();
+}
+
+void MainWindow::on_lineEdit_resultsScale_textEdited(const QString &arg1)
+{
+    updateDisplay();
 }

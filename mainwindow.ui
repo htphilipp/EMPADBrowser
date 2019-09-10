@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>840</width>
-    <height>530</height>
+    <width>850</width>
+    <height>593</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>EMPAD Browser v0.03preBeta - Hugh Philipp</string>
+   <string>EMPAD Browser v0.04preBeta - Hugh Philipp</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QSlider" name="frameSlider">
@@ -157,60 +157,6 @@
     <property name="text">
      <string>TextLabel</string>
     </property>
-   </widget>
-   <widget class="QWidget" name="gridLayoutWidget_2">
-    <property name="geometry">
-     <rect>
-      <x>40</x>
-      <y>260</y>
-      <width>231</width>
-      <height>80</height>
-     </rect>
-    </property>
-    <layout class="QGridLayout" name="gridLayout_2">
-     <item row="2" column="0">
-      <widget class="QLineEdit" name="lineEdit_6">
-       <property name="text">
-        <string>0.05</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="0">
-      <widget class="QLineEdit" name="lineEdit_4">
-       <property name="text">
-        <string>0.1</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QLineEdit" name="lineEdit_5">
-       <property name="text">
-        <string>2</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QLabel" name="label_5">
-       <property name="text">
-        <string>analogDisplay Scaling</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QLabel" name="label_6">
-       <property name="text">
-        <string>Digital Display Scaling</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="1">
-      <widget class="QLabel" name="label_7">
-       <property name="text">
-        <string>Combined Display Scaling</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
    </widget>
    <widget class="QCheckBox" name="checkBox">
     <property name="geometry">
@@ -402,24 +348,11 @@
      <string>Dark Step</string>
     </property>
    </widget>
-   <widget class="Line" name="line">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>370</y>
-      <width>801</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Horizontal</enum>
-    </property>
-   </widget>
    <widget class="Line" name="line_2">
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>450</y>
+      <y>490</y>
       <width>801</width>
       <height>16</height>
      </rect>
@@ -431,10 +364,36 @@
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>630</x>
+      <x>80</x>
+      <y>420</y>
+      <width>191</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <widget class="QLabel" name="label_17">
+       <property name="text">
+        <string>Mouse on:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_18">
+       <property name="text">
+        <string>ImageName</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>621</x>
       <y>391</y>
-      <width>171</width>
-      <height>59</height>
+      <width>161</width>
+      <height>101</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout_3">
@@ -480,29 +439,106 @@
        </property>
       </widget>
      </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>80</x>
-      <y>420</y>
-      <width>191</width>
-      <height>17</height>
-     </rect>
-    </property>
-    <layout class="QHBoxLayout" name="horizontalLayout_3">
-     <item>
-      <widget class="QLabel" name="label_17">
+     <item row="3" column="0">
+      <widget class="QLabel" name="label_gainPix">
        <property name="text">
-        <string>Mouse on:</string>
+        <string>pixelval</string>
        </property>
       </widget>
      </item>
-     <item>
-      <widget class="QLabel" name="label_18">
+     <item row="3" column="1">
+      <widget class="QLabel" name="label_29">
        <property name="text">
-        <string>ImageName</string>
+        <string>Gain</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="label_resPix">
+       <property name="text">
+        <string>pixelval</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QLabel" name="label_28">
+       <property name="text">
+        <string>Results</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>261</y>
+      <width>252</width>
+      <height>117</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridLayout_2">
+     <item row="0" column="0">
+      <widget class="QLineEdit" name="lineEdit_4">
+       <property name="text">
+        <string>0.1</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLabel" name="label_5">
+       <property name="text">
+        <string>analogDisplay Scaling</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLineEdit" name="lineEdit_5">
+       <property name="text">
+        <string>2</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLabel" name="label_6">
+       <property name="text">
+        <string>Digital Display Scaling</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLineEdit" name="lineEdit_6">
+       <property name="text">
+        <string>0.05</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLabel" name="label_7">
+       <property name="text">
+        <string>Combined Display Scaling</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLineEdit" name="lineEdit_resultsScale">
+       <property name="text">
+        <string>0.05</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QLabel" name="label_20">
+       <property name="text">
+        <string>Results Display Scaling</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0" colspan="2">
+      <widget class="Line" name="line">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
        </property>
       </widget>
      </item>
@@ -514,7 +550,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>840</width>
+     <width>850</width>
      <height>24</height>
     </rect>
    </property>
@@ -526,6 +562,7 @@
     <addaction name="actionPlot_Pixel_Values"/>
     <addaction name="actionHistogram_Area"/>
     <addaction name="actionCalc_Debounce_Offsets"/>
+    <addaction name="actionAdd_Frames"/>
    </widget>
    <widget class="QMenu" name="menuExport">
     <property name="title">
@@ -568,6 +605,11 @@
   <action name="actionCalc_Debounce_Offsets">
    <property name="text">
     <string>Calc. Debounce Offsets</string>
+   </property>
+  </action>
+  <action name="actionAdd_Frames">
+   <property name="text">
+    <string>Sum Frames</string>
    </property>
   </action>
  </widget>

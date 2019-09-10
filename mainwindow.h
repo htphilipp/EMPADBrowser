@@ -8,6 +8,7 @@
 #include "histogramareadialog.h"
 #include "moviedialog.h"
 #include "calcdebounceoffsets.h"
+#include "sumframesdialog.h"
 #include<opencv2/opencv.hpp>
 #include<opencv2/highgui.hpp>
 #include <opencv2/imgproc.hpp>
@@ -38,6 +39,7 @@ public:
     cv::Mat scaledAna;
     cv::Mat scaledGain;
     cv::Mat dark;
+    cv::Mat results;
 
     std::vector<double> offsets;
 
@@ -45,6 +47,8 @@ public:
     static void onMouseDig(int, int, int, int, void*);
     static void onMouseAna(int, int, int, int, void*);
     static void onMouseComb(int, int, int, int, void*);
+    static void onMouseResults(int, int, int, int, void*);
+    static void onMouseGain(int, int, int, int, void*);
     double getScaleFactor();
 
 private slots:
@@ -84,6 +88,10 @@ private slots:
 
     void on_actionCalc_Debounce_Offsets_triggered();
 
+    void on_actionAdd_Frames_triggered();
+
+    void on_lineEdit_resultsScale_textEdited(const QString &arg1);
+
 private:
     Ui::MainWindow *ui;
 
@@ -93,12 +101,14 @@ private:
     PlotPixels *pltPix;
     movieDialog *movDialog;
     CalcDebounceOffsets *calcOffsets;
+    SumFramesDialog *sumFrames;
 
     friend class HistogramDialog;
     friend class plotpixels;
     friend class HistogramAreaDialog;
     friend class movieDialog;
     friend class CalcDebounceOffsets;
+    friend class SumFramesDialog;
 };
 
 #endif // MAINWINDOW_H

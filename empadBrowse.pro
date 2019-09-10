@@ -42,7 +42,8 @@ SOURCES += \
         mainwindow.cpp \
         moviedialog.cpp \
         plotpixels.cpp \
-        qcustomplot.cpp
+        qcustomplot.cpp \
+        sumframesdialog.cpp
 
 HEADERS += \
         calcdebounceoffsets.h \
@@ -52,7 +53,8 @@ HEADERS += \
         mainwindow.h \
         moviedialog.h \
         plotpixels.h \
-        qcustomplot.h
+        qcustomplot.h \
+        sumframesdialog.h
 
 FORMS += \
         calcdebounceoffsets.ui \
@@ -60,7 +62,8 @@ FORMS += \
         histogramdialog.ui \
         mainwindow.ui \
         moviedialog.ui \
-        plotpixels.ui
+        plotpixels.ui \
+        sumframesdialog.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
