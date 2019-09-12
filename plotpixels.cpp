@@ -55,12 +55,26 @@ void PlotPixels::on_pushButton_collectVals_clicked()
                  mainSubLocal->rawData->imgAnalog->convertTo(mainSubLocal->scaledAna,CV_64F);
                  if(i%2)
                  {
-                    oddFrames.push_back(mainSubLocal->scaledAna.at<double>(y,x));
+                    if(!(ui->checkBox_subOff->isChecked()))
+                    {
+                        oddFrames.push_back(mainSubLocal->scaledAna.at<double>(y,x));
+                    }
+                    else
+                    {
+                        oddFrames.push_back(mainSubLocal->scaledAna.at<double>(y,x)-mainSubLocal->offsets[uint(i)]);
+                    }
                     oddframenum.push_back(double(i));
                  }
                  else
                  {
-                    evenFrames.push_back(mainSubLocal->scaledAna.at<double>(y,x));
+                     if(!(ui->checkBox_subOff->isChecked()))
+                     {
+                        evenFrames.push_back(mainSubLocal->scaledAna.at<double>(y,x));
+                     }
+                     else
+                     {
+                         evenFrames.push_back(mainSubLocal->scaledAna.at<double>(y,x)-mainSubLocal->offsets[uint(i)]);
+                     }
                     evenframenum.push_back(double(i));
                  }
              }
@@ -70,12 +84,26 @@ void PlotPixels::on_pushButton_collectVals_clicked()
                  //pixelDat.push_back((mainSubLocal->scaledAna.at<double>(y,x))-(mainSubLocal->dark.at<double>(y,x)));
                  if(i%2)
                  {
-                    oddFrames.push_back((mainSubLocal->scaledAna.at<double>(y,x))-(mainSubLocal->dark.at<double>(y,x)));
+                     if(!(ui->checkBox_subOff->isChecked()))
+                     {
+                        oddFrames.push_back((mainSubLocal->scaledAna.at<double>(y,x))-(mainSubLocal->dark.at<double>(y,x)));
+                     }
+                     else
+                     {
+                         oddFrames.push_back((mainSubLocal->scaledAna.at<double>(y,x))-(mainSubLocal->dark.at<double>(y,x))-mainSubLocal->offsets[uint(i)]);
+                     }
                     oddframenum.push_back(double(i));
                  }
                  else
                  {
-                    evenFrames.push_back((mainSubLocal->scaledAna.at<double>(y,x))-(mainSubLocal->dark.at<double>(y,x)));
+                     if(!(ui->checkBox_subOff->isChecked()))
+                     {
+                        evenFrames.push_back((mainSubLocal->scaledAna.at<double>(y,x))-(mainSubLocal->dark.at<double>(y,x)));
+                     }
+                     else
+                     {
+                         evenFrames.push_back((mainSubLocal->scaledAna.at<double>(y,x))-(mainSubLocal->dark.at<double>(y,x))-mainSubLocal->offsets[uint(i)]);
+                     }
                     evenframenum.push_back(double(i));
                  }
              }
@@ -138,9 +166,35 @@ void PlotPixels::on_pushButton_collectVals_clicked()
     }
 
      ui->pixelPlot->graph(0)->setData(evenframenum,evenFrames);
-     ui->pixelPlot->graph(0)->setPen(QPen(Qt::red));
+
+     if(ui->checkBox_plotDots->isChecked())
+     {
+         ui->pixelPlot->graph(0)->setLineStyle(QCPGraph::lsNone);
+         ui->pixelPlot->graph(0)->setScatterStyle(QCPScatterStyle::ssDot);
+         ui->pixelPlot->graph(0)->setPen(QPen(QBrush(Qt::red), 1));
+     }
+     else
+     {
+         ui->pixelPlot->graph(0)->setScatterStyle(QCPScatterStyle::ssNone);
+         ui->pixelPlot->graph(0)->setLineStyle(QCPGraph::lsLine);
+         ui->pixelPlot->graph(0)->setPen(QPen(Qt::red));
+     }
+
      ui->pixelPlot->graph(1)->setData(oddframenum,oddFrames);
-     ui->pixelPlot->graph(1)->setPen(QPen(Qt::blue));
+
+     if(ui->checkBox_plotDots->isChecked())
+     {
+         ui->pixelPlot->graph(1)->setLineStyle(QCPGraph::lsNone);
+         ui->pixelPlot->graph(1)->setScatterStyle(QCPScatterStyle::ssDot);
+         ui->pixelPlot->graph(1)->setPen(QPen(QBrush(Qt::blue), 1));
+     }
+     else
+     {
+        ui->pixelPlot->graph(1)->setScatterStyle(QCPScatterStyle::ssNone);
+        ui->pixelPlot->graph(1)->setLineStyle(QCPGraph::lsLine);
+        ui->pixelPlot->graph(1)->setPen(QPen(Qt::blue));
+     }
+
      ui->pixelPlot->xAxis->rescale();
      ui->pixelPlot->yAxis->rescale();
      ui->pixelPlot->graph(0)->setVisible(ui->checkBox_showEven->isChecked());
@@ -184,4 +238,29 @@ void PlotPixels::on_pushButton_expData_clicked()
         stream<<evenframenum[i]<<","<<evenFrames[i]<<"\n";
     }
     output.close();
+}
+
+void PlotPixels::on_checkBox_plotDots_stateChanged(int arg1)
+{
+    if(ui->checkBox_plotDots->isChecked())
+    {
+        ui->pixelPlot->graph(0)->setLineStyle(QCPGraph::lsNone);
+        ui->pixelPlot->graph(0)->setScatterStyle(QCPScatterStyle::ssDot);
+        ui->pixelPlot->graph(0)->setPen(QPen(QBrush(Qt::red), 1));
+
+        ui->pixelPlot->graph(1)->setLineStyle(QCPGraph::lsNone);
+        ui->pixelPlot->graph(1)->setScatterStyle(QCPScatterStyle::ssDot);
+        ui->pixelPlot->graph(1)->setPen(QPen(QBrush(Qt::blue), 1));
+    }
+    else
+    {
+        ui->pixelPlot->graph(0)->setScatterStyle(QCPScatterStyle::ssNone);
+        ui->pixelPlot->graph(1)->setScatterStyle(QCPScatterStyle::ssNone);
+        ui->pixelPlot->graph(0)->setLineStyle(QCPGraph::lsLine);
+        ui->pixelPlot->graph(1)->setLineStyle(QCPGraph::lsLine);
+        ui->pixelPlot->graph(0)->setPen(QPen(Qt::red));
+        ui->pixelPlot->graph(1)->setPen(QPen(Qt::blue));
+    }
+
+    ui->pixelPlot->replot();
 }

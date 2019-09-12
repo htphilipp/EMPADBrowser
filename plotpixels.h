@@ -35,6 +35,8 @@ private slots:
 
     void on_pushButton_expData_clicked();
 
+    void on_checkBox_plotDots_stateChanged(int arg1);
+
 private:
     Ui::PlotPixels *ui;
 };

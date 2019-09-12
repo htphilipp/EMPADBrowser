@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>EMPAD Browser v0.04preBeta - Hugh Philipp</string>
+   <string>EMPAD Browser v0.05preBeta - Hugh Philipp</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QSlider" name="frameSlider">
@@ -469,7 +469,7 @@
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -524,7 +524,7 @@
      <item row="3" column="0">
       <widget class="QLineEdit" name="lineEdit_resultsScale">
        <property name="text">
-        <string>0.05</string>
+        <string>0.001</string>
        </property>
       </widget>
      </item>

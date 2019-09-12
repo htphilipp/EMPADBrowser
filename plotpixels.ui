@@ -167,6 +167,32 @@
     <string>Export Data</string>
    </property>
   </widget>
+  <widget class="QCheckBox" name="checkBox_subOff">
+   <property name="geometry">
+    <rect>
+     <x>820</x>
+     <y>200</y>
+     <width>151</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Subtract Offsets</string>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="checkBox_plotDots">
+   <property name="geometry">
+    <rect>
+     <x>840</x>
+     <y>640</y>
+     <width>91</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Plot Dots</string>
+   </property>
+  </widget>
  </widget>
  <customwidgets>
   <customwidget>
