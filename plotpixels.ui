@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>995</width>
-    <height>696</height>
+    <width>999</width>
+    <height>711</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -190,7 +190,33 @@
     </rect>
    </property>
    <property name="text">
-    <string>Plot Dots</string>
+    <string>Plot Points</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lineEdit_pointsize">
+   <property name="geometry">
+    <rect>
+     <x>892</x>
+     <y>670</y>
+     <width>51</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>3</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_pointsize">
+   <property name="geometry">
+    <rect>
+     <x>860</x>
+     <y>673</y>
+     <width>52</width>
+     <height>15</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Size:</string>
    </property>
   </widget>
  </widget>

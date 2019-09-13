@@ -37,6 +37,8 @@ private slots:
 
     void on_checkBox_plotDots_stateChanged(int arg1);
 
+    void on_lineEdit_pointsize_textChanged(const QString &arg1);
+
 private:
     Ui::PlotPixels *ui;
 };

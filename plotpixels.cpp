@@ -170,7 +170,7 @@ void PlotPixels::on_pushButton_collectVals_clicked()
      if(ui->checkBox_plotDots->isChecked())
      {
          ui->pixelPlot->graph(0)->setLineStyle(QCPGraph::lsNone);
-         ui->pixelPlot->graph(0)->setScatterStyle(QCPScatterStyle::ssDot);
+         ui->pixelPlot->graph(0)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDisc,ui->lineEdit_pointsize->text().toDouble()));
          ui->pixelPlot->graph(0)->setPen(QPen(QBrush(Qt::red), 1));
      }
      else
@@ -185,7 +185,7 @@ void PlotPixels::on_pushButton_collectVals_clicked()
      if(ui->checkBox_plotDots->isChecked())
      {
          ui->pixelPlot->graph(1)->setLineStyle(QCPGraph::lsNone);
-         ui->pixelPlot->graph(1)->setScatterStyle(QCPScatterStyle::ssDot);
+         ui->pixelPlot->graph(1)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDisc,ui->lineEdit_pointsize->text().toDouble()));
          ui->pixelPlot->graph(1)->setPen(QPen(QBrush(Qt::blue), 1));
      }
      else
@@ -245,11 +245,12 @@ void PlotPixels::on_checkBox_plotDots_stateChanged(int arg1)
     if(ui->checkBox_plotDots->isChecked())
     {
         ui->pixelPlot->graph(0)->setLineStyle(QCPGraph::lsNone);
-        ui->pixelPlot->graph(0)->setScatterStyle(QCPScatterStyle::ssDot);
+        ui->pixelPlot->graph(0)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDisc,ui->lineEdit_pointsize->text().toDouble()));
+
         ui->pixelPlot->graph(0)->setPen(QPen(QBrush(Qt::red), 1));
 
         ui->pixelPlot->graph(1)->setLineStyle(QCPGraph::lsNone);
-        ui->pixelPlot->graph(1)->setScatterStyle(QCPScatterStyle::ssDot);
+        ui->pixelPlot->graph(1)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDisc,ui->lineEdit_pointsize->text().toDouble()));
         ui->pixelPlot->graph(1)->setPen(QPen(QBrush(Qt::blue), 1));
     }
     else
@@ -262,5 +263,12 @@ void PlotPixels::on_checkBox_plotDots_stateChanged(int arg1)
         ui->pixelPlot->graph(1)->setPen(QPen(Qt::blue));
     }
 
+    ui->pixelPlot->replot();
+}
+
+void PlotPixels::on_lineEdit_pointsize_textChanged(const QString &arg1)
+{
+    ui->pixelPlot->graph(0)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDisc,ui->lineEdit_pointsize->text().toDouble()));
+    ui->pixelPlot->graph(1)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDisc,ui->lineEdit_pointsize->text().toDouble()));
     ui->pixelPlot->replot();
 }
