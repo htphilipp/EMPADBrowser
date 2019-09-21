@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QFileDialog>
+#include <QProgressDialog>
 #include "histogramdialog.h"
 #include "plotpixels.h"
 #include "histogramareadialog.h"
@@ -15,6 +16,8 @@
 #include <opencv2/imgcodecs.hpp>
 #include "empad2lib.h"
 #include <boost/filesystem.hpp>
+#include <boost/iostreams/device/mapped_file.hpp>
+#include <boost/iostreams/stream.hpp>
 #include <vector>
 
 namespace Ui {
@@ -38,7 +41,19 @@ public:
     cv::Mat scaledDig;
     cv::Mat scaledAna;
     cv::Mat scaledGain;
+    // calibration constants
     cv::Mat dark;
+ //   boost::iostreams::mapped_file_sink *mem_ifile;
+
+    //matrix Calibration constants
+    cv::Mat darks[2];       //even and odd dark frames
+    cv::Mat lgOffset[2];    //low gain offsets (charge injection?)
+    cv::Mat dADUdN[2];      //the low gain ADU charge dump equivalent
+    cv::Mat sRatio[2];      //the ratio of the slopes dADU(HG)/dADU(LG)
+
+    cv::Mat gainMask;
+    cv::Mat notgainMask;
+
     cv::Mat results;
 
     std::vector<double> offsets;
@@ -91,6 +106,12 @@ private slots:
     void on_actionAdd_Frames_triggered();
 
     void on_lineEdit_resultsScale_textEdited(const QString &arg1);
+
+    void on_actionCalculate_Calibration_Darks_triggered();
+
+    void on_checkBox_calib_stateChanged(int arg1);
+
+    void on_actionExport_Calibrated_Data_triggered();
 
 private:
     Ui::MainWindow *ui;

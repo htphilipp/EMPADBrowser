@@ -161,7 +161,7 @@
    <widget class="QCheckBox" name="checkBox">
     <property name="geometry">
      <rect>
-      <x>700</x>
+      <x>620</x>
       <y>270</y>
       <width>91</width>
       <height>21</height>
@@ -226,7 +226,7 @@
    <widget class="QPushButton" name="pushButton_4">
     <property name="geometry">
      <rect>
-      <x>560</x>
+      <x>520</x>
       <y>270</y>
       <width>80</width>
       <height>23</height>
@@ -279,7 +279,7 @@
     <property name="geometry">
      <rect>
       <x>80</x>
-      <y>391</y>
+      <y>406</y>
       <width>581</width>
       <height>20</height>
      </rect>
@@ -352,7 +352,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>490</y>
+      <y>510</y>
       <width>801</width>
       <height>16</height>
      </rect>
@@ -365,7 +365,7 @@
     <property name="geometry">
      <rect>
       <x>80</x>
-      <y>420</y>
+      <y>435</y>
       <width>191</width>
       <height>17</height>
      </rect>
@@ -391,7 +391,7 @@
     <property name="geometry">
      <rect>
       <x>621</x>
-      <y>391</y>
+      <y>406</y>
       <width>161</width>
       <height>101</height>
      </rect>
@@ -544,6 +544,32 @@
      </item>
     </layout>
    </widget>
+   <widget class="QCheckBox" name="checkBox_calib">
+    <property name="geometry">
+     <rect>
+      <x>730</x>
+      <y>270</y>
+      <width>91</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Calibrated</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="checkBox_evenOdd">
+    <property name="geometry">
+     <rect>
+      <x>620</x>
+      <y>370</y>
+      <width>161</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Calib. even/odd shift</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -556,7 +582,7 @@
    </property>
    <widget class="QMenu" name="menuData">
     <property name="title">
-     <string>Data</string>
+     <string>Data Browse</string>
     </property>
     <addaction name="actionHistogram_Pixel"/>
     <addaction name="actionPlot_Pixel_Values"/>
@@ -569,9 +595,17 @@
      <string>Export</string>
     </property>
     <addaction name="actionSave_Video"/>
+    <addaction name="actionExport_Calibrated_Data"/>
+   </widget>
+   <widget class="QMenu" name="menuCalibration">
+    <property name="title">
+     <string>Calibration</string>
+    </property>
+    <addaction name="actionCalculate_Calibration_Darks"/>
    </widget>
    <addaction name="menuData"/>
    <addaction name="menuExport"/>
+   <addaction name="menuCalibration"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -610,6 +644,16 @@
   <action name="actionAdd_Frames">
    <property name="text">
     <string>Sum Frames</string>
+   </property>
+  </action>
+  <action name="actionCalculate_Calibration_Darks">
+   <property name="text">
+    <string>Calculate Calibration Darks</string>
+   </property>
+  </action>
+  <action name="actionExport_Calibrated_Data">
+   <property name="text">
+    <string>Export Calibrated Data</string>
    </property>
   </action>
  </widget>

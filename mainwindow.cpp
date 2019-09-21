@@ -15,6 +15,18 @@ MainWindow::MainWindow(QWidget *parent) :
     scaledGain = cv::Mat(128,128,CV_64F,cv::Scalar(0));
     results = cv::Mat(128,128,CV_64F,cv::Scalar(0));
 
+    darks[0]    =   cv::Mat(128,128,CV_64F,cv::Scalar(0));
+    darks[1]    =   cv::Mat(128,128,CV_64F,cv::Scalar(0));
+    lgOffset[0] =   cv::Mat(128,128,CV_64F,cv::Scalar(0));
+    lgOffset[1] =   cv::Mat(128,128,CV_64F,cv::Scalar(0));
+    dADUdN[0]   =   cv::Mat(128,128,CV_64F,cv::Scalar(5300));
+    dADUdN[1]   =   cv::Mat(128,128,CV_64F,cv::Scalar(5300));
+    sRatio[0]   =   cv::Mat(128,128,CV_64F,cv::Scalar(18));
+    sRatio[1]   =   cv::Mat(128,128,CV_64F,cv::Scalar(18));
+
+    gainMask = cv::Mat(128,128,CV_64F,cv::Scalar(0));
+    notgainMask = cv::Mat(128,128,CV_64F,cv::Scalar(0));
+
     cv::namedWindow("analog", cv::WINDOW_NORMAL);
     cv::namedWindow("digital", cv::WINDOW_NORMAL);
     cv::namedWindow("combined",cv::WINDOW_NORMAL);
@@ -215,11 +227,14 @@ void MainWindow::updateDisplay()
 {
     double scaleFactor;
     int except;
+    uint frame;
+    int cI; //calibration index
 
+    frame = rawData->getFrameNum();
 
-    if(!(ui->checkBox_2->isChecked()))
+    if(!(ui->checkBox_2->isChecked()) )
     {
-        if(!(ui->checkBox->isChecked()))
+        if(!(ui->checkBox->isChecked()) && !(ui->checkBox_calib->isChecked()))
         {
             rawData->imgAnalog->convertTo(scaledAna,CV_64F);
             cv::convertScaleAbs(scaledAna-8000, adjMap, anaDisplayScale);
@@ -242,7 +257,7 @@ void MainWindow::updateDisplay()
             cv::imshow("gain",adjMap);
 
         }
-        else
+        else if((ui->checkBox->isChecked()) && !(ui->checkBox_calib->isChecked()))
         {
             rawData->imgAnalog->convertTo(scaledAna,CV_64F);
             scaledAna -= dark;
@@ -261,6 +276,41 @@ void MainWindow::updateDisplay()
             cv::imshow("combined",adjMap);
 
             rawData->imgGain->convertTo(scaledGain,CV_64F);
+            cv::convertScaleAbs(scaledGain,adjMap,200);
+            cv::imshow("gain",adjMap);
+        }
+        else
+        {
+            cI= frame%2;
+
+            if(ui->checkBox_evenOdd->isChecked())
+            {
+                cI = (frame+1)%2;
+            }
+
+            rawData->imgAnalog->convertTo(scaledAna,CV_64F);
+            scaledAna -= darks[cI];
+            cv::convertScaleAbs(scaledAna, adjMap, anaDisplayScale);
+            cv::imshow("analog", adjMap);
+
+            cv::convertScaleAbs(*(rawData->imgDigital), adjMap, digDisplayScale);
+            cv::imshow("digital", adjMap);
+
+            scaleFactor = ui->lineEdit_3->text().toInt();
+            rawData->imgDigital->convertTo(scaledDig,CV_64F);
+            //rawData->imgAnalog->convertTo(scaledAna,CV_64F);
+
+            rawData->imgGain->convertTo(scaledGain,CV_64F);
+            cv::threshold(scaledGain,notgainMask,0.5,1,1);
+            cv::threshold(scaledGain,gainMask,0.5,1,0);
+
+            combined = (gainMask.mul((scaledDig.mul(dADUdN[cI])+scaledAna-lgOffset[cI]))).mul(sRatio[cI])+ notgainMask.mul(scaledAna); //think this is correct
+           // combined = (gainMask.mul((scaledDig.mul(dADUdN[cI])+scaledAna-lgOffset[cI]))).mul(sRatio[cI]);
+
+            cv::convertScaleAbs(combined,adjMap,comDisplayScale);
+            cv::imshow("combined",adjMap);
+
+            //rawData->imgGain->convertTo(scaledGain,CV_64F);
             cv::convertScaleAbs(scaledGain,adjMap,200);
             cv::imshow("gain",adjMap);
         }
@@ -438,4 +488,117 @@ void MainWindow::on_actionAdd_Frames_triggered()
 void MainWindow::on_lineEdit_resultsScale_textEdited(const QString &arg1)
 {
     updateDisplay();
+}
+
+void MainWindow::on_actionCalculate_Calibration_Darks_triggered()
+{
+    uint minField;
+    uint maxField;
+    uint fstep;
+    uint frms=0;
+
+    fstep = 2;
+
+    minField = ui->lineEdit_7->text().toUInt();
+    maxField = ui->lineEdit_8->text().toUInt();
+
+    if(maxField>(rawBGData->getNumOfFrames()-1))
+    {
+        maxField = (rawBGData->getNumOfFrames()-1);
+    }
+    if(minField>(rawBGData->getNumOfFrames()-1))
+    {
+        minField = (rawBGData->getNumOfFrames()-1);
+    }
+    darks[0] = cv::Mat(128,128,CV_64F,cv::Scalar(0));
+    darks[1] = cv::Mat(128,128,CV_64F,cv::Scalar(0));
+
+    if(minField<=maxField)
+    {
+        for(auto i = minField; i <= maxField; i=i+fstep)
+        {
+            rawBGData->goToFrame(i);
+            rawBGData->imgAnalog->convertTo(scaledAna,CV_64F);
+            darks[i%2] += scaledAna;
+            frms++;
+        }
+        //dark /= (maxField-minField)+1;
+        darks[minField%2] /= frms;
+    }
+
+    minField++;
+    frms = 0;
+
+    if(minField<=maxField)
+    {
+        for(auto i = minField; i <= maxField; i=i+fstep)
+        {
+            rawBGData->goToFrame(i);
+            rawBGData->imgAnalog->convertTo(scaledAna,CV_64F);
+            darks[i%2] += scaledAna;
+            frms++;
+        }
+        //dark /= (maxField-minField)+1;
+        darks[minField%2] /= frms;
+    }
+
+
+}
+
+void MainWindow::on_checkBox_calib_stateChanged(int arg1)
+{
+    updateDisplay();
+}
+
+void MainWindow::on_actionExport_Calibrated_Data_triggered()
+{
+    uint maxindex   = rawData->getNumOfFrames();
+    uint preFrame = rawData->getFrameNum();
+    QString filename;
+    uint cI;
+    uint frame;
+    filename        = QFileDialog::getSaveFileName(this, tr("Save data to:"), "f:/", tr("*.craw"));
+    boost::iostreams::mapped_file_params params;
+    params.path     = filename.toStdString();
+    params.new_file_size =  sizeof(uint32_t)*128*128*maxindex;
+    params.flags         = boost::iostreams::mapped_file::mapmode::readwrite;
+    cv::Mat *output;
+    output = nullptr;
+    boost::iostreams::mapped_file_sink out(params);
+    QProgressDialog progress("Exporting data to file...","cancel",0, int(maxindex));
+
+    progress.setWindowModality(Qt::WindowModal);
+
+    for(unsigned long i = 0; i<maxindex; i++)
+    {
+        if(output!=nullptr)
+        {
+            delete output;
+        }
+
+        output = new cv::Mat(int(128),int(128),CV_32FC1,reinterpret_cast<uchar *>(const_cast<char *>(out.data()))+(i*128*128*sizeof(uint32_t)));
+
+        rawData->goToFrame(i);
+        frame = rawData->getFrameNum();
+        cI= frame%2;
+
+        if(ui->checkBox_evenOdd->isChecked())
+        {
+            cI = (frame+1)%2;
+        }
+
+        rawData->imgAnalog->convertTo(scaledAna,CV_64F);
+        scaledAna -= darks[cI];
+        rawData->imgDigital->convertTo(scaledDig,CV_64F);
+        rawData->imgGain->convertTo(scaledGain,CV_64F);
+        combined = (gainMask.mul((scaledDig.mul(dADUdN[cI])+scaledAna-lgOffset[cI]))).mul(sRatio[cI])+ notgainMask.mul(scaledAna); //think this is correct
+        combined.convertTo(*output,CV_32FC1);
+        progress.setValue(int(i));
+    }
+
+    if(out.is_open())
+    {
+        out.close();
+    }
+    rawData->goToFrame(preFrame);
 }
