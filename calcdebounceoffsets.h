@@ -30,6 +30,10 @@ private slots:
 
     void on_pushButton_clicked();
 
+    void on_pushButton_calc_2_clicked();
+
+    void on_pushButton_2_clicked();
+
 private:
     Ui::CalcDebounceOffsets *ui;
 };

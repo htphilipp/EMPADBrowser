@@ -49,6 +49,8 @@ MainWindow::MainWindow(QWidget *parent) :
     calcOffsets = new CalcDebounceOffsets(this);
     sumFrames = new SumFramesDialog(this);
     offsets.clear();
+    mousex = 0;
+    mousey = 0;
 
     anaDisplayScale = ui->lineEdit_4->text().toDouble();
     digDisplayScale = ui->lineEdit_5->text().toDouble();
@@ -67,6 +69,8 @@ void MainWindow::onMouseAna(int evt, int x, int y, int flags, void *param)
     mainSub->ui->label_comPix->setNum(mainSub->combined.at<double>(y,x));
     mainSub->ui->label_gainPix->setNum(mainSub->scaledGain.at<double>(y,x));
     mainSub->ui->label_resPix->setNum(mainSub->results.at<double>(y,x));
+    mainSub->mousex = x;
+    mainSub->mousey = y;
 
     mainSub->ui->label_18->setText("analog");
 }
@@ -83,6 +87,8 @@ void MainWindow::onMouseDig(int evt, int x, int y, int flags, void *param)
     mainSub->ui->label_comPix->setNum(mainSub->combined.at<double>(y,x));
     mainSub->ui->label_gainPix->setNum(mainSub->scaledGain.at<double>(y,x));
     mainSub->ui->label_resPix->setNum(mainSub->results.at<double>(y,x));
+    mainSub->mousex = x;
+    mainSub->mousey = y;
 
     mainSub->ui->label_18->setText("digital");
 }
@@ -99,6 +105,8 @@ void MainWindow::onMouseComb(int evt, int x, int y, int flags, void *param)
     mainSub->ui->label_comPix->setNum(mainSub->combined.at<double>(y,x));
     mainSub->ui->label_gainPix->setNum(mainSub->scaledGain.at<double>(y,x));
     mainSub->ui->label_resPix->setNum(mainSub->results.at<double>(y,x));
+    mainSub->mousex = x;
+    mainSub->mousey = y;
 
     mainSub->ui->label_18->setText("combined");
 }
@@ -115,6 +123,8 @@ void MainWindow::onMouseResults(int evt, int x, int y, int flags, void *param)
     mainSub->ui->label_comPix->setNum(mainSub->combined.at<double>(y,x));
     mainSub->ui->label_gainPix->setNum(mainSub->scaledGain.at<double>(y,x));
     mainSub->ui->label_resPix->setNum(mainSub->results.at<double>(y,x));
+    mainSub->mousex = x;
+    mainSub->mousey = y;
 
     mainSub->ui->label_18->setText("results");
 }
@@ -131,6 +141,8 @@ void MainWindow::onMouseGain(int evt, int x, int y, int flags, void *param)
     mainSub->ui->label_comPix->setNum(mainSub->combined.at<double>(y,x));
     mainSub->ui->label_gainPix->setNum(mainSub->scaledGain.at<double>(y,x));
     mainSub->ui->label_resPix->setNum(mainSub->results.at<double>(y,x));
+    mainSub->mousex = x;
+    mainSub->mousey = y;
 
     mainSub->ui->label_18->setText("gain");
 }
@@ -229,7 +241,7 @@ void MainWindow::updateDisplay()
     int except;
     uint frame;
     int cI; //calibration index
-
+    ui->label_20->setText(QString(""));
     frame = rawData->getFrameNum();
 
     if(!(ui->checkBox_2->isChecked()) )
@@ -384,6 +396,18 @@ void MainWindow::updateDisplay()
 
 }
 
+void MainWindow::updatePixelValue()
+{
+    ui->label_13->setNum(mousex);
+    ui->label_15->setNum(mousey);
+
+    ui->label_anaPix->setNum(scaledAna.at<double>(mousey,mousex));
+    ui->label_digPix->setNum(scaledDig.at<double>(mousey,mousex));
+    ui->label_comPix->setNum(combined.at<double>(mousey,mousex));
+    ui->label_gainPix->setNum(scaledGain.at<double>(mousey,mousex));
+    ui->label_resPix->setNum(results.at<double>(mousey,mousex));
+}
+
 double MainWindow::getScaleFactor()
 {
     return ui->lineEdit_3->text().toDouble();
@@ -394,6 +418,7 @@ void MainWindow::on_frameSlider_valueChanged(int value)
     rawData->goToFrame(uint(value));
     ui->label_3->setNum(int(rawData->getFrameNum()));
     updateDisplay();
+    updatePixelValue();
 }
 
 void MainWindow::on_lineEdit_4_textEdited(const QString &arg1)
@@ -453,6 +478,7 @@ void MainWindow::on_pushButton_4_clicked()
 void MainWindow::on_checkBox_stateChanged(int arg1)
 {
     updateDisplay();
+    updatePixelValue();
 }
 
 void MainWindow::on_actionHistogram_Pixel_triggered()
@@ -488,6 +514,18 @@ void MainWindow::on_actionAdd_Frames_triggered()
 void MainWindow::on_lineEdit_resultsScale_textEdited(const QString &arg1)
 {
     updateDisplay();
+}
+
+uint MainWindow::getCalibEvenOdd()
+{
+    if(ui->checkBox_evenOdd->isChecked())
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
 }
 
 void MainWindow::on_actionCalculate_Calibration_Darks_triggered()
@@ -548,6 +586,7 @@ void MainWindow::on_actionCalculate_Calibration_Darks_triggered()
 void MainWindow::on_checkBox_calib_stateChanged(int arg1)
 {
     updateDisplay();
+    updatePixelValue();
 }
 
 void MainWindow::on_actionExport_Calibrated_Data_triggered()
@@ -601,4 +640,73 @@ void MainWindow::on_actionExport_Calibrated_Data_triggered()
         out.close();
     }
     rawData->goToFrame(preFrame);
+}
+
+void MainWindow::on_checkBox_evenOdd_stateChanged(int arg1)
+{
+    updateDisplay();
+    updatePixelValue();
+}
+
+void MainWindow::on_actionExport_Calibrated_Data_with_offsets_triggered()
+{
+    uint maxindex   = rawData->getNumOfFrames();
+
+    if(offsetsCalib.size() == maxindex)
+    {
+        ui->label_20->setText(QString(""));
+        uint preFrame = rawData->getFrameNum();
+        QString filename;
+        uint cI;
+        uint frame;
+        filename        = QFileDialog::getSaveFileName(this, tr("Save data to:"), "f:/", tr("*.craw"));
+        boost::iostreams::mapped_file_params params;
+        params.path     = filename.toStdString();
+        params.new_file_size =  sizeof(uint32_t)*128*128*maxindex;
+        params.flags         = boost::iostreams::mapped_file::mapmode::readwrite;
+        cv::Mat *output;
+        output = nullptr;
+        boost::iostreams::mapped_file_sink out(params);
+        QProgressDialog progress("Exporting data to file...","cancel",0, int(maxindex));
+
+        progress.setWindowModality(Qt::WindowModal);
+
+        for(unsigned long i = 0; i<maxindex; i++)
+        {
+            if(output!=nullptr)
+            {
+                delete output;
+            }
+
+            output = new cv::Mat(int(128),int(128),CV_32FC1,reinterpret_cast<uchar *>(const_cast<char *>(out.data()))+(i*128*128*sizeof(uint32_t)));
+
+            rawData->goToFrame(i);
+            frame = rawData->getFrameNum();
+            cI= frame%2;
+
+            if(ui->checkBox_evenOdd->isChecked())
+            {
+                cI = (frame+1)%2;
+            }
+
+            rawData->imgAnalog->convertTo(scaledAna,CV_64F);
+            scaledAna -= darks[cI];
+            rawData->imgDigital->convertTo(scaledDig,CV_64F);
+            rawData->imgGain->convertTo(scaledGain,CV_64F);
+            combined = (gainMask.mul((scaledDig.mul(dADUdN[cI])+scaledAna-lgOffset[cI]))).mul(sRatio[cI])+ notgainMask.mul(scaledAna); //think this is correct
+            combined -= offsetsCalib[i];
+            combined.convertTo(*output,CV_32FC1);
+            progress.setValue(int(i));
+        }
+
+        if(out.is_open())
+        {
+            out.close();
+        }
+        rawData->goToFrame(preFrame);
+    }
+    else
+    {
+        ui->label_20->setText(QString("Must calculate offsets for calibrated data..."));
+    }
 }

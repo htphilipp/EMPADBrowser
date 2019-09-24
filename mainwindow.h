@@ -36,6 +36,7 @@ public:
     Empad2 *rawData;
     Empad2 *rawBGData;
     void updateDisplay();
+    void updatePixelValue();
     cv::Mat adjMap;
     cv::Mat combined;
     cv::Mat scaledDig;
@@ -57,6 +58,9 @@ public:
     cv::Mat results;
 
     std::vector<double> offsets;
+    std::vector<double> offsetsCalib;
+
+    int mousex,mousey;
 
     double anaDisplayScale,digDisplayScale,comDisplayScale;
     static void onMouseDig(int, int, int, int, void*);
@@ -65,6 +69,7 @@ public:
     static void onMouseResults(int, int, int, int, void*);
     static void onMouseGain(int, int, int, int, void*);
     double getScaleFactor();
+    uint getCalibEvenOdd();
 
 private slots:
     void on_pushButton_clicked();
@@ -112,6 +117,10 @@ private slots:
     void on_checkBox_calib_stateChanged(int arg1);
 
     void on_actionExport_Calibrated_Data_triggered();
+
+    void on_checkBox_evenOdd_stateChanged(int arg1);
+
+    void on_actionExport_Calibrated_Data_with_offsets_triggered();
 
 private:
     Ui::MainWindow *ui;

@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>EMPAD Browser v0.05preBeta - Hugh Philipp</string>
+   <string>EMPAD Browser v0.07preBeta - Hugh Philipp</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QSlider" name="frameSlider">
@@ -570,6 +570,19 @@
      <string>Calib. even/odd shift</string>
     </property>
    </widget>
+   <widget class="QLabel" name="label_21">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>490</y>
+      <width>551</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -596,6 +609,7 @@
     </property>
     <addaction name="actionSave_Video"/>
     <addaction name="actionExport_Calibrated_Data"/>
+    <addaction name="actionExport_Calibrated_Data_with_offsets"/>
    </widget>
    <widget class="QMenu" name="menuCalibration">
     <property name="title">
@@ -654,6 +668,11 @@
   <action name="actionExport_Calibrated_Data">
    <property name="text">
     <string>Export Calibrated Data</string>
+   </property>
+  </action>
+  <action name="actionExport_Calibrated_Data_with_offsets">
+   <property name="text">
+    <string>Export Calibrated Data (with offsets)</string>
    </property>
   </action>
  </widget>
