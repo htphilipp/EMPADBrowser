@@ -17,12 +17,12 @@ MainWindow::MainWindow(QWidget *parent) :
 
     darks[0]    =   cv::Mat(128,128,CV_64F,cv::Scalar(0));
     darks[1]    =   cv::Mat(128,128,CV_64F,cv::Scalar(0));
-    lgOffset[0] =   cv::Mat(128,128,CV_64F,cv::Scalar(0));
-    lgOffset[1] =   cv::Mat(128,128,CV_64F,cv::Scalar(0));
-    dADUdN[0]   =   cv::Mat(128,128,CV_64F,cv::Scalar(5300));
-    dADUdN[1]   =   cv::Mat(128,128,CV_64F,cv::Scalar(5300));
-    sRatio[0]   =   cv::Mat(128,128,CV_64F,cv::Scalar(18));
-    sRatio[1]   =   cv::Mat(128,128,CV_64F,cv::Scalar(18));
+    lgOffset[0] =   cv::Mat(128,128,CV_64F,cv::Scalar(370));
+    lgOffset[1] =   cv::Mat(128,128,CV_64F,cv::Scalar(370));
+    dADUdN[0]   =   cv::Mat(128,128,CV_64F,cv::Scalar(5900));
+    dADUdN[1]   =   cv::Mat(128,128,CV_64F,cv::Scalar(5900));
+    sRatio[0]   =   cv::Mat(128,128,CV_64F,cv::Scalar(19.4));
+    sRatio[1]   =   cv::Mat(128,128,CV_64F,cv::Scalar(19.4));
 
     gainMask = cv::Mat(128,128,CV_64F,cv::Scalar(0));
     notgainMask = cv::Mat(128,128,CV_64F,cv::Scalar(0));
