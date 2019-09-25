@@ -10,6 +10,7 @@
 #include "moviedialog.h"
 #include "calcdebounceoffsets.h"
 #include "sumframesdialog.h"
+#include "calibrationdialog.h"
 #include<opencv2/opencv.hpp>
 #include<opencv2/highgui.hpp>
 #include <opencv2/imgproc.hpp>
@@ -130,6 +131,8 @@ private slots:
 
     void on_actionCopy_single_darks_to_calibration_darks_triggered();
 
+    void on_actionCalibration_Dialog_triggered();
+
 private:
     Ui::MainWindow *ui;
 
@@ -140,6 +143,7 @@ private:
     movieDialog *movDialog;
     CalcDebounceOffsets *calcOffsets;
     SumFramesDialog *sumFrames;
+    CalibrationDialog *calibDialog;
 
     friend class HistogramDialog;
     friend class plotpixels;
@@ -147,6 +151,7 @@ private:
     friend class movieDialog;
     friend class CalcDebounceOffsets;
     friend class SumFramesDialog;
+    friend class CalibrationDialog;
 };
 
 #endif // MAINWINDOW_H

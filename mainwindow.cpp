@@ -48,6 +48,7 @@ MainWindow::MainWindow(QWidget *parent) :
     movDialog = new movieDialog(this);
     calcOffsets = new CalcDebounceOffsets(this);
     sumFrames = new SumFramesDialog(this);
+    calibDialog = new CalibrationDialog(this);
     offsets.clear();
     mousex = 0;
     mousey = 0;
@@ -742,4 +743,9 @@ void MainWindow::on_actionCopy_single_darks_to_calibration_darks_triggered()
     darks[1]=dark;
     updateDisplay();
     updatePixelValue();
+}
+
+void MainWindow::on_actionCalibration_Dialog_triggered()
+{
+    calibDialog->show();
 }

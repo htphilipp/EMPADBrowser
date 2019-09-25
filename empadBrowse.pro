@@ -35,6 +35,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         calcdebounceoffsets.cpp \
+        calibrationdialog.cpp \
         empad2lib.cpp \
         histogramareadialog.cpp \
         histogramdialog.cpp \
@@ -47,6 +48,7 @@ SOURCES += \
 
 HEADERS += \
         calcdebounceoffsets.h \
+        calibrationdialog.h \
         empad2lib.h \
         histogramareadialog.h \
         histogramdialog.h \
@@ -58,6 +60,7 @@ HEADERS += \
 
 FORMS += \
         calcdebounceoffsets.ui \
+        calibrationdialog.ui \
         histogramareadialog.ui \
         histogramdialog.ui \
         mainwindow.ui \

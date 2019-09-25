@@ -617,6 +617,7 @@
     </property>
     <addaction name="actionCalculate_Calibration_Darks"/>
     <addaction name="actionCopy_single_darks_to_calibration_darks"/>
+    <addaction name="actionCalibration_Dialog"/>
    </widget>
    <widget class="QMenu" name="menuCalibration_Browser">
     <property name="title">
@@ -703,6 +704,11 @@
   <action name="actionCopy_single_darks_to_calibration_darks">
    <property name="text">
     <string>Copy single darks to calibration darks</string>
+   </property>
+  </action>
+  <action name="actionCalibration_Dialog">
+   <property name="text">
+    <string>Calibration Dialog</string>
    </property>
   </action>
  </widget>
