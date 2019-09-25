@@ -628,8 +628,10 @@ void MainWindow::on_actionExport_Calibrated_Data_triggered()
 
         rawData->imgAnalog->convertTo(scaledAna,CV_64F);
         scaledAna -= darks[cI];
-        rawData->imgDigital->convertTo(scaledDig,CV_64F);
+        rawData->imgDigital->convertTo(scaledDig,CV_64F);       
         rawData->imgGain->convertTo(scaledGain,CV_64F);
+        cv::threshold(scaledGain,notgainMask,0.5,1,1);
+        cv::threshold(scaledGain,gainMask,0.5,1,0);
         combined = (gainMask.mul((scaledDig.mul(dADUdN[cI])+scaledAna-lgOffset[cI]))).mul(sRatio[cI])+ notgainMask.mul(scaledAna); //think this is correct
         combined.convertTo(*output,CV_32FC1);
         progress.setValue(int(i));
@@ -693,9 +695,11 @@ void MainWindow::on_actionExport_Calibrated_Data_with_offsets_triggered()
             scaledAna -= darks[cI];
             rawData->imgDigital->convertTo(scaledDig,CV_64F);
             rawData->imgGain->convertTo(scaledGain,CV_64F);
+            cv::threshold(scaledGain,notgainMask,0.5,1,1);
+            cv::threshold(scaledGain,gainMask,0.5,1,0);
             combined = (gainMask.mul((scaledDig.mul(dADUdN[cI])+scaledAna-lgOffset[cI]))).mul(sRatio[cI])+ notgainMask.mul(scaledAna); //think this is correct
             combined -= offsetsCalib[i];
-            combined.convertTo(*output,CV_32FC1);
+            combined.convertTo(*output,CV_32F);
             progress.setValue(int(i));
         }
 
@@ -709,4 +713,33 @@ void MainWindow::on_actionExport_Calibrated_Data_with_offsets_triggered()
     {
         ui->label_20->setText(QString("Must calculate offsets for calibrated data..."));
     }
+}
+
+void MainWindow::on_actionEven_Calib_Darks_to_Results_triggered()
+{
+    results = darks[0];
+    updateDisplay();
+    updatePixelValue();
+}
+
+void MainWindow::on_actionDarks_to_Results_triggered()
+{
+    results = dark;
+    updateDisplay();
+    updatePixelValue();
+}
+
+void MainWindow::on_actionOdd_Calib_Dakrs_to_Results_triggered()
+{
+    results = darks[1];
+    updateDisplay();
+    updatePixelValue();
+}
+
+void MainWindow::on_actionCopy_single_darks_to_calibration_darks_triggered()
+{
+    darks[0]=dark;
+    darks[1]=dark;
+    updateDisplay();
+    updatePixelValue();
 }

@@ -616,10 +616,20 @@
      <string>Calibration</string>
     </property>
     <addaction name="actionCalculate_Calibration_Darks"/>
+    <addaction name="actionCopy_single_darks_to_calibration_darks"/>
+   </widget>
+   <widget class="QMenu" name="menuCalibration_Browser">
+    <property name="title">
+     <string>Calibration Browser</string>
+    </property>
+    <addaction name="actionDarks_to_Results"/>
+    <addaction name="actionEven_Calib_Darks_to_Results"/>
+    <addaction name="actionOdd_Calib_Dakrs_to_Results"/>
    </widget>
    <addaction name="menuData"/>
    <addaction name="menuExport"/>
    <addaction name="menuCalibration"/>
+   <addaction name="menuCalibration_Browser"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -673,6 +683,26 @@
   <action name="actionExport_Calibrated_Data_with_offsets">
    <property name="text">
     <string>Export Calibrated Data (with offsets)</string>
+   </property>
+  </action>
+  <action name="actionDarks_to_Results">
+   <property name="text">
+    <string>Darks to Results</string>
+   </property>
+  </action>
+  <action name="actionEven_Calib_Darks_to_Results">
+   <property name="text">
+    <string>Even Calib. Darks to Results</string>
+   </property>
+  </action>
+  <action name="actionOdd_Calib_Dakrs_to_Results">
+   <property name="text">
+    <string>Odd Calib. Dakrs to Results</string>
+   </property>
+  </action>
+  <action name="actionCopy_single_darks_to_calibration_darks">
+   <property name="text">
+    <string>Copy single darks to calibration darks</string>
    </property>
   </action>
  </widget>

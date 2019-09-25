@@ -149,6 +149,8 @@ void CalcDebounceOffsets::on_pushButton_calc_2_clicked()
         mainSubLocal->scaledAna -= mainSubLocal->darks[cI];
         mainSubLocal->rawData->imgDigital->convertTo(mainSubLocal->scaledDig,CV_64F);
         mainSubLocal->rawData->imgGain->convertTo(mainSubLocal->scaledGain,CV_64F);
+        cv::threshold(mainSubLocal->scaledGain,mainSubLocal->notgainMask,0.5,1,1);
+        cv::threshold(mainSubLocal->scaledGain,mainSubLocal->gainMask,0.5,1,0);
         mainSubLocal->combined = (mainSubLocal->gainMask.mul((mainSubLocal->scaledDig.mul(mainSubLocal->dADUdN[cI])+mainSubLocal->scaledAna-mainSubLocal->lgOffset[cI]))).mul(mainSubLocal->sRatio[cI])+ mainSubLocal->notgainMask.mul(mainSubLocal->scaledAna);
         tempMatImg = mainSubLocal->combined;
         cv::threshold(tempMatImg,tempMatImgVals,ui->lineEdit_threshold->text().toDouble(),0,4);

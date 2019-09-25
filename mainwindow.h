@@ -122,6 +122,14 @@ private slots:
 
     void on_actionExport_Calibrated_Data_with_offsets_triggered();
 
+    void on_actionEven_Calib_Darks_to_Results_triggered();
+
+    void on_actionDarks_to_Results_triggered();
+
+    void on_actionOdd_Calib_Dakrs_to_Results_triggered();
+
+    void on_actionCopy_single_darks_to_calibration_darks_triggered();
+
 private:
     Ui::MainWindow *ui;
 
