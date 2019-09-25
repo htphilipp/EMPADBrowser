@@ -69,35 +69,35 @@ void CalibrationDialog::on_pushButton_writeCalibFile_clicked()
     boost::iostreams::mapped_file_sink out(params);
 
     output = new cv::Mat(int(128),int(128),CV_64F,reinterpret_cast<uchar *>(const_cast<char *>(out.data()))+(i*128*128*sizeof(uint64_t)));
-    *output = mainSubLocal->darks[0];
+    (mainSubLocal->darks[0]).copyTo(*output);
     delete output;
     i++;
     output = new cv::Mat(int(128),int(128),CV_64F,reinterpret_cast<uchar *>(const_cast<char *>(out.data()))+(i*128*128*sizeof(uint64_t)));
-    *output = mainSubLocal->darks[1];
+    (mainSubLocal->darks[1]).copyTo(*output);
     delete output;
     i++;
     output = new cv::Mat(int(128),int(128),CV_64F,reinterpret_cast<uchar *>(const_cast<char *>(out.data()))+(i*128*128*sizeof(uint64_t)));
-    *output = mainSubLocal->sRatio[0];
+    (mainSubLocal->sRatio[0]).copyTo(*output);
     delete output;
     i++;
     output = new cv::Mat(int(128),int(128),CV_64F,reinterpret_cast<uchar *>(const_cast<char *>(out.data()))+(i*128*128*sizeof(uint64_t)));
-    *output = mainSubLocal->sRatio[1];
+    (mainSubLocal->sRatio[1]).copyTo(*output);
     delete output;
     i++;
     output = new cv::Mat(int(128),int(128),CV_64F,reinterpret_cast<uchar *>(const_cast<char *>(out.data()))+(i*128*128*sizeof(uint64_t)));
-    *output = mainSubLocal->lgOffset[0];
+    (mainSubLocal->lgOffset[0]).copyTo(*output);
     delete output;
     i++;
     output = new cv::Mat(int(128),int(128),CV_64F,reinterpret_cast<uchar *>(const_cast<char *>(out.data()))+(i*128*128*sizeof(uint64_t)));
-    *output = mainSubLocal->lgOffset[1];
+    (mainSubLocal->lgOffset[1]).copyTo(*output);
     delete output;
     i++;
     output = new cv::Mat(int(128),int(128),CV_64F,reinterpret_cast<uchar *>(const_cast<char *>(out.data()))+(i*128*128*sizeof(uint64_t)));
-    *output = mainSubLocal->dADUdN[0];
+    (mainSubLocal->dADUdN[0]).copyTo(*output);
     delete output;
     i++;
     output = new cv::Mat(int(128),int(128),CV_64F,reinterpret_cast<uchar *>(const_cast<char *>(out.data()))+(i*128*128*sizeof(uint64_t)));
-    *output = mainSubLocal->dADUdN[1];
+    (mainSubLocal->dADUdN[1]).copyTo(*output);
     delete output;
 
     if(out.is_open())
@@ -111,7 +111,7 @@ void CalibrationDialog::on_pushButton_readCalibFile_clicked()
 {
     MainWindow *mainSubLocal = reinterpret_cast<MainWindow*>(mainSub);
     QString filename;
-    filename        = QFileDialog::getSaveFileName(this, tr("Save calibration to:"), "f:/", tr("*.calib"));
+    filename        = QFileDialog::getOpenFileName(this, tr("Load calibration from:"), "f:/", tr("*.calib"));
     uint sizeOfFile;
     // calibration file 8 64-bit float frames
     //in this order:
@@ -126,37 +126,37 @@ void CalibrationDialog::on_pushButton_readCalibFile_clicked()
     if(infile.size() == sizeof(uint64_t)*128*128*8)
     {
         input = new cv::Mat(int(128),int(128),CV_64F,reinterpret_cast<uchar *>(const_cast<char *>(infile.data()))+(i*128*128*sizeof(uint64_t)));
-        mainSubLocal->darks[0] = *input;
+        (*input).copyTo(mainSubLocal->darks[0]);
         delete input;
         i++;
         input = new cv::Mat(int(128),int(128),CV_64F,reinterpret_cast<uchar *>(const_cast<char *>(infile.data()))+(i*128*128*sizeof(uint64_t)));
-        mainSubLocal->darks[1] = *input;
+        (*input).copyTo(mainSubLocal->darks[1]);
         delete input;
         i++;
         input = new cv::Mat(int(128),int(128),CV_64F,reinterpret_cast<uchar *>(const_cast<char *>(infile.data()))+(i*128*128*sizeof(uint64_t)));
-        mainSubLocal->sRatio[0] = *input;
+        (*input).copyTo(mainSubLocal->sRatio[0]);
         delete input;
         i++;
         input = new cv::Mat(int(128),int(128),CV_64F,reinterpret_cast<uchar *>(const_cast<char *>(infile.data()))+(i*128*128*sizeof(uint64_t)));
-        mainSubLocal->sRatio[0] = *input;
-        delete input;
-        i++;
-
-        input = new cv::Mat(int(128),int(128),CV_64F,reinterpret_cast<uchar *>(const_cast<char *>(infile.data()))+(i*128*128*sizeof(uint64_t)));
-        mainSubLocal->lgOffset[0] = *input;
-        delete input;
-        i++;
-        input = new cv::Mat(int(128),int(128),CV_64F,reinterpret_cast<uchar *>(const_cast<char *>(infile.data()))+(i*128*128*sizeof(uint64_t)));
-        mainSubLocal->lgOffset[1] = *input;
+        (*input).copyTo(mainSubLocal->sRatio[0]);
         delete input;
         i++;
 
         input = new cv::Mat(int(128),int(128),CV_64F,reinterpret_cast<uchar *>(const_cast<char *>(infile.data()))+(i*128*128*sizeof(uint64_t)));
-        mainSubLocal->dADUdN[0] = *input;
+        (*input).copyTo(mainSubLocal->lgOffset[0]);
         delete input;
         i++;
         input = new cv::Mat(int(128),int(128),CV_64F,reinterpret_cast<uchar *>(const_cast<char *>(infile.data()))+(i*128*128*sizeof(uint64_t)));
-        mainSubLocal->dADUdN[1] = *input;
+        (*input).copyTo(mainSubLocal->lgOffset[1]);
+        delete input;
+        i++;
+
+        input = new cv::Mat(int(128),int(128),CV_64F,reinterpret_cast<uchar *>(const_cast<char *>(infile.data()))+(i*128*128*sizeof(uint64_t)));
+        (*input).copyTo(mainSubLocal->dADUdN[0]);
+        delete input;
+        i++;
+        input = new cv::Mat(int(128),int(128),CV_64F,reinterpret_cast<uchar *>(const_cast<char *>(infile.data()))+(i*128*128*sizeof(uint64_t)));
+        (*input).copyTo(mainSubLocal->dADUdN[1]);
         delete input;
     }
     else
