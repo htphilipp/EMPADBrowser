@@ -8,12 +8,12 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
 
-    scaledAna = cv::Mat(128,128,CV_64F,cv::Scalar(0));
-    scaledDig = cv::Mat(128,128,CV_64F,cv::Scalar(0));
-    combined = cv::Mat(128,128,CV_64F,cv::Scalar(0));
-    dark = cv::Mat(128,128,CV_64F,cv::Scalar(0));
-    scaledGain = cv::Mat(128,128,CV_64F,cv::Scalar(0));
-    results = cv::Mat(128,128,CV_64F,cv::Scalar(0));
+    scaledAna   =   cv::Mat(128,128,CV_64F,cv::Scalar(0));
+    scaledDig   =   cv::Mat(128,128,CV_64F,cv::Scalar(0));
+    combined    =   cv::Mat(128,128,CV_64F,cv::Scalar(0));
+    dark        =   cv::Mat(128,128,CV_64F,cv::Scalar(0));
+    scaledGain  =   cv::Mat(128,128,CV_64F,cv::Scalar(0));
+    results     =   cv::Mat(128,128,CV_64F,cv::Scalar(0));
 
     darks[0]    =   cv::Mat(128,128,CV_64F,cv::Scalar(0));
     darks[1]    =   cv::Mat(128,128,CV_64F,cv::Scalar(0));
@@ -24,8 +24,8 @@ MainWindow::MainWindow(QWidget *parent) :
     sRatio[0]   =   cv::Mat(128,128,CV_64F,cv::Scalar(19.4));
     sRatio[1]   =   cv::Mat(128,128,CV_64F,cv::Scalar(19.4));
 
-    gainMask = cv::Mat(128,128,CV_64F,cv::Scalar(0));
-    notgainMask = cv::Mat(128,128,CV_64F,cv::Scalar(0));
+    gainMask    =   cv::Mat(128,128,CV_64F,cv::Scalar(0));
+    notgainMask =   cv::Mat(128,128,CV_64F,cv::Scalar(0));
 
     cv::namedWindow("analog", cv::WINDOW_NORMAL);
     cv::namedWindow("digital", cv::WINDOW_NORMAL);
@@ -242,151 +242,156 @@ void MainWindow::updateDisplay()
     int except;
     uint frame;
     int cI; //calibration index
-    ui->label_20->setText(QString(""));
-    frame = rawData->getFrameNum();
+    ui->label_21->setText(QString(""));
 
-    if(!(ui->checkBox_2->isChecked()) )
+
+    if(rawData != nullptr)
     {
-        if(!(ui->checkBox->isChecked()) && !(ui->checkBox_calib->isChecked()))
-        {
-            rawData->imgAnalog->convertTo(scaledAna,CV_64F);
-            cv::convertScaleAbs(scaledAna-8000, adjMap, anaDisplayScale);
-            cv::imshow("analog", adjMap);
+            frame = rawData->getFrameNum();
 
-            rawData->imgDigital->convertTo(scaledDig,CV_64F);
-            cv::convertScaleAbs(*(rawData->imgDigital), adjMap, digDisplayScale);
-            cv::imshow("digital", adjMap);
-
-            scaleFactor = ui->lineEdit_3->text().toInt();
-            rawData->imgDigital->convertTo(scaledDig,CV_64F);
-            rawData->imgAnalog->convertTo(scaledAna,CV_64F);
-
-            combined = (scaledDig*(scaleFactor))+(scaledAna-8000);
-            cv::convertScaleAbs(combined,adjMap,comDisplayScale);
-            cv::imshow("combined",adjMap);
-
-            rawData->imgGain->convertTo(scaledGain,CV_64F);
-            cv::convertScaleAbs(scaledGain,adjMap,200);
-            cv::imshow("gain",adjMap);
-
-        }
-        else if((ui->checkBox->isChecked()) && !(ui->checkBox_calib->isChecked()))
-        {
-            rawData->imgAnalog->convertTo(scaledAna,CV_64F);
-            scaledAna -= dark;
-            cv::convertScaleAbs(scaledAna, adjMap, anaDisplayScale);
-            cv::imshow("analog", adjMap);
-
-            cv::convertScaleAbs(*(rawData->imgDigital), adjMap, digDisplayScale);
-            cv::imshow("digital", adjMap);
-
-            scaleFactor = ui->lineEdit_3->text().toInt();
-            rawData->imgDigital->convertTo(scaledDig,CV_64F);
-            //rawData->imgAnalog->convertTo(scaledAna,CV_64F);
-
-            combined = (scaledDig*(scaleFactor))+(scaledAna);
-            cv::convertScaleAbs(combined,adjMap,comDisplayScale);
-            cv::imshow("combined",adjMap);
-
-            rawData->imgGain->convertTo(scaledGain,CV_64F);
-            cv::convertScaleAbs(scaledGain,adjMap,200);
-            cv::imshow("gain",adjMap);
-        }
-        else
-        {
-            cI= frame%2;
-
-            if(ui->checkBox_evenOdd->isChecked())
+            if(!(ui->checkBox_2->isChecked()) )
             {
-                cI = (frame+1)%2;
+                if(!(ui->checkBox->isChecked()) && !(ui->checkBox_calib->isChecked()))
+                {
+                    rawData->imgAnalog->convertTo(scaledAna,CV_64F);
+                    cv::convertScaleAbs(scaledAna-8000, adjMap, anaDisplayScale);
+                    cv::imshow("analog", adjMap);
+
+                    rawData->imgDigital->convertTo(scaledDig,CV_64F);
+                    cv::convertScaleAbs(*(rawData->imgDigital), adjMap, digDisplayScale);
+                    cv::imshow("digital", adjMap);
+
+                    scaleFactor = ui->lineEdit_3->text().toInt();
+                    rawData->imgDigital->convertTo(scaledDig,CV_64F);
+                    rawData->imgAnalog->convertTo(scaledAna,CV_64F);
+
+                    combined = (scaledDig*(scaleFactor))+(scaledAna-8000);
+                    cv::convertScaleAbs(combined,adjMap,comDisplayScale);
+                    cv::imshow("combined",adjMap);
+
+                    rawData->imgGain->convertTo(scaledGain,CV_64F);
+                    cv::convertScaleAbs(scaledGain,adjMap,200);
+                    cv::imshow("gain",adjMap);
+
+                }
+                else if((ui->checkBox->isChecked()) && !(ui->checkBox_calib->isChecked()))
+                {
+                    rawData->imgAnalog->convertTo(scaledAna,CV_64F);
+                    scaledAna -= dark;
+                    cv::convertScaleAbs(scaledAna, adjMap, anaDisplayScale);
+                    cv::imshow("analog", adjMap);
+
+                    cv::convertScaleAbs(*(rawData->imgDigital), adjMap, digDisplayScale);
+                    cv::imshow("digital", adjMap);
+
+                    scaleFactor = ui->lineEdit_3->text().toInt();
+                    rawData->imgDigital->convertTo(scaledDig,CV_64F);
+                    //rawData->imgAnalog->convertTo(scaledAna,CV_64F);
+
+                    combined = (scaledDig*(scaleFactor))+(scaledAna);
+                    cv::convertScaleAbs(combined,adjMap,comDisplayScale);
+                    cv::imshow("combined",adjMap);
+
+                    rawData->imgGain->convertTo(scaledGain,CV_64F);
+                    cv::convertScaleAbs(scaledGain,adjMap,200);
+                    cv::imshow("gain",adjMap);
+                }
+                else
+                {
+                    cI= frame%2;
+
+                    if(ui->checkBox_evenOdd->isChecked())
+                    {
+                        cI = (frame+1)%2;
+                    }
+
+                    rawData->imgAnalog->convertTo(scaledAna,CV_64F);
+                    scaledAna -= darks[cI];
+                    cv::convertScaleAbs(scaledAna, adjMap, anaDisplayScale);
+                    cv::imshow("analog", adjMap);
+
+                    cv::convertScaleAbs(*(rawData->imgDigital), adjMap, digDisplayScale);
+                    cv::imshow("digital", adjMap);
+
+                    scaleFactor = ui->lineEdit_3->text().toInt();
+                    rawData->imgDigital->convertTo(scaledDig,CV_64F);
+                    //rawData->imgAnalog->convertTo(scaledAna,CV_64F);
+
+                    rawData->imgGain->convertTo(scaledGain,CV_64F);
+                    cv::threshold(scaledGain,notgainMask,0.5,1,1);
+                    cv::threshold(scaledGain,gainMask,0.5,1,0);
+
+                    combined = (gainMask.mul((scaledDig.mul(dADUdN[cI])+scaledAna-lgOffset[cI]))).mul(sRatio[cI])+ notgainMask.mul(scaledAna); //think this is correct
+                   // combined = (gainMask.mul((scaledDig.mul(dADUdN[cI])+scaledAna-lgOffset[cI]))).mul(sRatio[cI]);
+
+                    cv::convertScaleAbs(combined,adjMap,comDisplayScale);
+                    cv::imshow("combined",adjMap);
+
+                    //rawData->imgGain->convertTo(scaledGain,CV_64F);
+                    cv::convertScaleAbs(scaledGain,adjMap,200);
+                    cv::imshow("gain",adjMap);
+                }
             }
+            else
+            {
+                if(!(ui->checkBox->isChecked()))
+                {
 
-            rawData->imgAnalog->convertTo(scaledAna,CV_64F);
-            scaledAna -= darks[cI];
-            cv::convertScaleAbs(scaledAna, adjMap, anaDisplayScale);
-            cv::imshow("analog", adjMap);
+                    rawData->imgAnalog->convertTo(scaledAna,CV_64F);
+                    scaledAna -= 8000;
 
-            cv::convertScaleAbs(*(rawData->imgDigital), adjMap, digDisplayScale);
-            cv::imshow("digital", adjMap);
-
-            scaleFactor = ui->lineEdit_3->text().toInt();
-            rawData->imgDigital->convertTo(scaledDig,CV_64F);
-            //rawData->imgAnalog->convertTo(scaledAna,CV_64F);
-
-            rawData->imgGain->convertTo(scaledGain,CV_64F);
-            cv::threshold(scaledGain,notgainMask,0.5,1,1);
-            cv::threshold(scaledGain,gainMask,0.5,1,0);
-
-            combined = (gainMask.mul((scaledDig.mul(dADUdN[cI])+scaledAna-lgOffset[cI]))).mul(sRatio[cI])+ notgainMask.mul(scaledAna); //think this is correct
-           // combined = (gainMask.mul((scaledDig.mul(dADUdN[cI])+scaledAna-lgOffset[cI]))).mul(sRatio[cI]);
-
-            cv::convertScaleAbs(combined,adjMap,comDisplayScale);
-            cv::imshow("combined",adjMap);
-
-            //rawData->imgGain->convertTo(scaledGain,CV_64F);
-            cv::convertScaleAbs(scaledGain,adjMap,200);
-            cv::imshow("gain",adjMap);
-        }
-    }
-    else
-    {
-        if(!(ui->checkBox->isChecked()))
-        {
-
-            rawData->imgAnalog->convertTo(scaledAna,CV_64F);
-            scaledAna -= 8000;
-
-            cv::log(scaledAna,scaledAna);
-            cv::convertScaleAbs(scaledAna, adjMap, anaDisplayScale);
-            cv::imshow("analog", adjMap);
+                    cv::log(scaledAna,scaledAna);
+                    cv::convertScaleAbs(scaledAna, adjMap, anaDisplayScale);
+                    cv::imshow("analog", adjMap);
 
 
-            rawData->imgDigital->convertTo(scaledDig,CV_64F);
-            scaledDig += 0.00001;
-            cv::log(scaledDig,scaledDig);
-            cv::convertScaleAbs(scaledDig, adjMap, digDisplayScale);
-            cv::imshow("digital", adjMap);
+                    rawData->imgDigital->convertTo(scaledDig,CV_64F);
+                    scaledDig += 0.00001;
+                    cv::log(scaledDig,scaledDig);
+                    cv::convertScaleAbs(scaledDig, adjMap, digDisplayScale);
+                    cv::imshow("digital", adjMap);
 
-            scaleFactor = ui->lineEdit_3->text().toInt();
-            rawData->imgDigital->convertTo(scaledDig,CV_64F);
-            rawData->imgAnalog->convertTo(scaledAna,CV_64F);
+                    scaleFactor = ui->lineEdit_3->text().toInt();
+                    rawData->imgDigital->convertTo(scaledDig,CV_64F);
+                    rawData->imgAnalog->convertTo(scaledAna,CV_64F);
 
-            combined = (scaledDig*(scaleFactor))+(scaledAna-8000);
-            cv::log(combined,combined);
-            cv::convertScaleAbs(combined,adjMap,comDisplayScale);
-            cv::imshow("combined",adjMap);
+                    combined = (scaledDig*(scaleFactor))+(scaledAna-8000);
+                    cv::log(combined,combined);
+                    cv::convertScaleAbs(combined,adjMap,comDisplayScale);
+                    cv::imshow("combined",adjMap);
 
-            rawData->imgGain->convertTo(scaledGain,CV_64F);
-            cv::convertScaleAbs(scaledGain,adjMap,200);
-            cv::imshow("gain",adjMap);
-        }
-        else
-        {
-            rawData->imgAnalog->convertTo(scaledAna,CV_64F);
-            scaledAna -= dark;
-            cv::log(scaledAna,scaledAna);
-            cv::convertScaleAbs(scaledAna, adjMap, anaDisplayScale);
-            cv::imshow("analog", adjMap);
+                    rawData->imgGain->convertTo(scaledGain,CV_64F);
+                    cv::convertScaleAbs(scaledGain,adjMap,200);
+                    cv::imshow("gain",adjMap);
+                }
+                else
+                {
+                    rawData->imgAnalog->convertTo(scaledAna,CV_64F);
+                    scaledAna -= dark;
+                    cv::log(scaledAna,scaledAna);
+                    cv::convertScaleAbs(scaledAna, adjMap, anaDisplayScale);
+                    cv::imshow("analog", adjMap);
 
-            rawData->imgDigital->convertTo(scaledDig,CV_64F);
-            scaledDig += 0.00001;
-            cv::log(scaledDig,scaledDig);
-            cv::convertScaleAbs(scaledDig, adjMap, digDisplayScale);
-            cv::imshow("digital", adjMap);
+                    rawData->imgDigital->convertTo(scaledDig,CV_64F);
+                    scaledDig += 0.00001;
+                    cv::log(scaledDig,scaledDig);
+                    cv::convertScaleAbs(scaledDig, adjMap, digDisplayScale);
+                    cv::imshow("digital", adjMap);
 
-            scaleFactor = ui->lineEdit_3->text().toInt();
-            rawData->imgDigital->convertTo(scaledDig,CV_64F);
-            //rawData->imgAnalog->convertTo(scaledAna,CV_64F);
+                    scaleFactor = ui->lineEdit_3->text().toInt();
+                    rawData->imgDigital->convertTo(scaledDig,CV_64F);
+                    //rawData->imgAnalog->convertTo(scaledAna,CV_64F);
 
-            combined = (scaledDig*(scaleFactor))+(scaledAna);
-            cv::log(combined,combined);
-            cv::convertScaleAbs(combined,adjMap,comDisplayScale);
-            cv::imshow("combined",adjMap);
+                    combined = (scaledDig*(scaleFactor))+(scaledAna);
+                    cv::log(combined,combined);
+                    cv::convertScaleAbs(combined,adjMap,comDisplayScale);
+                    cv::imshow("combined",adjMap);
 
-            rawData->imgGain->convertTo(scaledGain,CV_64F);
-            cv::convertScaleAbs(scaledGain,adjMap,200);
-            cv::imshow("gain",adjMap);
-        }
+                    rawData->imgGain->convertTo(scaledGain,CV_64F);
+                    cv::convertScaleAbs(scaledGain,adjMap,200);
+                    cv::imshow("gain",adjMap);
+                }
+            }
     }
 
     cv::convertScaleAbs(results,adjMap,ui->lineEdit_resultsScale->text().toDouble());
@@ -657,7 +662,7 @@ void MainWindow::on_actionExport_Calibrated_Data_with_offsets_triggered()
 
     if(offsetsCalib.size() == maxindex)
     {
-        ui->label_20->setText(QString(""));
+        ui->label_21->setText(QString(""));
         uint preFrame = rawData->getFrameNum();
         QString filename;
         uint cI;
@@ -712,7 +717,7 @@ void MainWindow::on_actionExport_Calibrated_Data_with_offsets_triggered()
     }
     else
     {
-        ui->label_20->setText(QString("Must calculate offsets for calibrated data..."));
+        ui->label_21->setText(QString("Must calculate offsets for calibrated data..."));
     }
 }
 
@@ -748,4 +753,48 @@ void MainWindow::on_actionCopy_single_darks_to_calibration_darks_triggered()
 void MainWindow::on_actionCalibration_Dialog_triggered()
 {
     calibDialog->show();
+}
+
+void MainWindow::on_actionEven_Calib_Gain_Ratio_to_Results_triggered()
+{
+    results = sRatio[0];
+    updateDisplay();
+    updatePixelValue();
+}
+
+void MainWindow::on_actionOdd_Calib_Gain_Ratio_to_Results_triggered()
+{
+    results = sRatio[1];
+    updateDisplay();
+    updatePixelValue();
+}
+
+
+void MainWindow::on_actionEven_Calib_Offsets_to_Results_triggered()
+{
+    results = lgOffset[0];
+    updateDisplay();
+    updatePixelValue();
+}
+
+void MainWindow::on_actionOdd_Calib_Offsets_to_Results_triggered()
+{
+    results = lgOffset[1];
+    updateDisplay();
+    updatePixelValue();
+}
+
+
+void MainWindow::on_actionEven_Calib_d_ADUlg_dDump_to_Results_triggered()
+{
+    results = dADUdN[0];
+    updateDisplay();
+    updatePixelValue();
+}
+
+void MainWindow::on_actionOdd_Calib_d_ADUlg_dDump_to_Results_triggered()
+{
+    results = dADUdN[1];
+    updateDisplay();
+    updatePixelValue();
 }

@@ -168,3 +168,5 @@ void CalibrationDialog::on_pushButton_readCalibFile_clicked()
         infile.close();
     }
 }
+
+

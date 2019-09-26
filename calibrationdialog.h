@@ -15,6 +15,7 @@ public:
     QWidget *mainSub;
     explicit CalibrationDialog(QWidget *parent = nullptr);
     ~CalibrationDialog();
+//    void updateDisplayValues();
 
 private slots:
     void on_pushButton_constDark_clicked();

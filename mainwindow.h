@@ -133,6 +133,18 @@ private slots:
 
     void on_actionCalibration_Dialog_triggered();
 
+    void on_actionEven_Calib_Gain_Ratio_to_Results_triggered();
+
+    void on_actionOdd_Calib_Gain_Ratio_to_Results_triggered();
+
+    void on_actionEven_Calib_Offsets_to_Results_triggered();
+
+    void on_actionOdd_Calib_Offsets_to_Results_triggered();
+
+    void on_actionEven_Calib_d_ADUlg_dDump_to_Results_triggered();
+
+    void on_actionOdd_Calib_d_ADUlg_dDump_to_Results_triggered();
+
 private:
     Ui::MainWindow *ui;
 

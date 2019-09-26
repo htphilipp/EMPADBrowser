@@ -474,8 +474,8 @@
      <rect>
       <x>20</x>
       <y>261</y>
-      <width>252</width>
-      <height>117</height>
+      <width>281</width>
+      <height>141</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout_2">
@@ -489,7 +489,7 @@
      <item row="0" column="1">
       <widget class="QLabel" name="label_5">
        <property name="text">
-        <string>analogDisplay Scaling</string>
+        <string>AnalogDisplay Scaling</string>
        </property>
       </widget>
      </item>
@@ -626,6 +626,12 @@
     <addaction name="actionDarks_to_Results"/>
     <addaction name="actionEven_Calib_Darks_to_Results"/>
     <addaction name="actionOdd_Calib_Dakrs_to_Results"/>
+    <addaction name="actionEven_Calib_Gain_Ratio_to_Results"/>
+    <addaction name="actionOdd_Calib_Gain_Ratio_to_Results"/>
+    <addaction name="actionEven_Calib_Offsets_to_Results"/>
+    <addaction name="actionOdd_Calib_Offsets_to_Results"/>
+    <addaction name="actionEven_Calib_d_ADUlg_dDump_to_Results"/>
+    <addaction name="actionOdd_Calib_d_ADUlg_dDump_to_Results"/>
    </widget>
    <addaction name="menuData"/>
    <addaction name="menuExport"/>
@@ -709,6 +715,36 @@
   <action name="actionCalibration_Dialog">
    <property name="text">
     <string>Calibration Dialog</string>
+   </property>
+  </action>
+  <action name="actionEven_Calib_Gain_Ratio_to_Results">
+   <property name="text">
+    <string>Even Calib. Gain Ratio to Results</string>
+   </property>
+  </action>
+  <action name="actionOdd_Calib_Gain_Ratio_to_Results">
+   <property name="text">
+    <string>Odd Calib. Gain Ratio to Results</string>
+   </property>
+  </action>
+  <action name="actionEven_Calib_Offsets_to_Results">
+   <property name="text">
+    <string>Even Calib. Offsets to Results</string>
+   </property>
+  </action>
+  <action name="actionOdd_Calib_Offsets_to_Results">
+   <property name="text">
+    <string>Odd Calib. Offsets to Results</string>
+   </property>
+  </action>
+  <action name="actionEven_Calib_d_ADUlg_dDump_to_Results">
+   <property name="text">
+    <string>Even Calib. d(ADUlg)/dDump to Results</string>
+   </property>
+  </action>
+  <action name="actionOdd_Calib_d_ADUlg_dDump_to_Results">
+   <property name="text">
+    <string>Odd Calib. d(ADUlg)/dDump to Results</string>
    </property>
   </action>
  </widget>
