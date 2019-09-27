@@ -145,6 +145,8 @@ private slots:
 
     void on_actionOdd_Calib_d_ADUlg_dDump_to_Results_triggered();
 
+    void on_checkBox_subOff_stateChanged(int arg1);
+
 private:
     Ui::MainWindow *ui;
 

@@ -289,6 +289,13 @@ void MainWindow::updateDisplay()
                     //rawData->imgAnalog->convertTo(scaledAna,CV_64F);
 
                     combined = (scaledDig*(scaleFactor))+(scaledAna);
+                    if(ui->checkBox_subOff->isChecked())
+                    {
+                        if(offsets.size()==rawData->getNumOfFrames())
+                        {
+                            combined -= offsets[frame];
+                        }
+                    }
                     cv::convertScaleAbs(combined,adjMap,comDisplayScale);
                     cv::imshow("combined",adjMap);
 
@@ -323,6 +330,13 @@ void MainWindow::updateDisplay()
 
                     combined = (gainMask.mul((scaledDig.mul(dADUdN[cI])+scaledAna-lgOffset[cI]))).mul(sRatio[cI])+ notgainMask.mul(scaledAna); //think this is correct
                    // combined = (gainMask.mul((scaledDig.mul(dADUdN[cI])+scaledAna-lgOffset[cI]))).mul(sRatio[cI]);
+                    if(ui->checkBox_subOff->isChecked())
+                    {
+                        if(offsetsCalib.size()==rawData->getNumOfFrames())
+                        {
+                            combined -= offsetsCalib[frame];
+                        }
+                    }
 
                     cv::convertScaleAbs(combined,adjMap,comDisplayScale);
                     cv::imshow("combined",adjMap);
@@ -795,6 +809,12 @@ void MainWindow::on_actionEven_Calib_d_ADUlg_dDump_to_Results_triggered()
 void MainWindow::on_actionOdd_Calib_d_ADUlg_dDump_to_Results_triggered()
 {
     results = dADUdN[1];
+    updateDisplay();
+    updatePixelValue();
+}
+
+void MainWindow::on_checkBox_subOff_stateChanged(int arg1)
+{
     updateDisplay();
     updatePixelValue();
 }

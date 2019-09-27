@@ -20,8 +20,8 @@ movieDialog::~movieDialog()
 void movieDialog::on_pushButton_clicked()
 {
     MainWindow *mainSubLocal = reinterpret_cast<MainWindow*>(mainSub);
-    cv::Mat tempMat = cv::Mat(int(mainSubLocal->rawData->getxdim()),3*int(mainSubLocal->rawData->getydim()),CV_64F,cv::Scalar(0));
-    cv::Mat tempMat8bit = cv::Mat(int(mainSubLocal->rawData->getxdim()),3*int(mainSubLocal->rawData->getydim()),CV_8U,cv::Scalar(0));
+    cv::Mat tempMat = cv::Mat(2*int(mainSubLocal->rawData->getxdim()),2*int(mainSubLocal->rawData->getydim()),CV_64F,cv::Scalar(0));
+    cv::Mat tempMat8bit = cv::Mat(2*int(mainSubLocal->rawData->getxdim()),2*int(mainSubLocal->rawData->getydim()),CV_8U,cv::Scalar(0));
     //cv::Mat tempMat8bitc3 = cv::Mat(int(mainSubLocal->rawData->getxdim()),3*int(mainSubLocal->rawData->getydim()),CV_8UC3,cv::Scalar(0));
     cv::Mat tempSized;
 
@@ -62,7 +62,7 @@ void movieDialog::on_pushButton_clicked()
     //vidWrite.open(filename.toStdString(),0x00000021,10, cv::Size(3*int(mainSubLocal->rawData->getxdim()),int(mainSubLocal->rawData->getydim())));
     //vidWrite.open(filename.toStdString(),cv::VideoWriter::fourcc('M','J','P','G'),20, cv::Size(128,3*128),true); //explicit dimensions for testing
     //vidWrite.open(filename.toStdString(),-1,20, cv::Size(128,3*128),true); //explicit dimensions for testing
-    vidWrite.open(filename.toStdString(),cv::VideoWriter::fourcc('M','J','P','G'),20, cv::Size(7*3*int(mainSubLocal->rawData->getxdim()),7*int(mainSubLocal->rawData->getydim())),false); //explicit dimensions for testing
+    vidWrite.open(filename.toStdString(),cv::VideoWriter::fourcc('M','J','P','G'),40, cv::Size(7*2*int(mainSubLocal->rawData->getxdim()),7*2*int(mainSubLocal->rawData->getydim())),false); //explicit dimensions for testing
     //vidWrite.open(filename.toStdString(),cv::VideoWriter::fourcc('M','P','G','1'),20, cv::Size(4*3*int(mainSubLocal->rawData->getxdim()),4*int(mainSubLocal->rawData->getydim())),false); //explicit dimensions for testing
 
 
@@ -75,7 +75,7 @@ void movieDialog::on_pushButton_clicked()
     {
         for(auto i = frameBegin; i<=frameEnd; i=i+ui->lineEdit_step->text().toInt())
         {
-            mainSubLocal->rawData->goToFrame(i);
+            mainSubLocal->rawData->goToFrame(uint(i));
             mainSubLocal->updateDisplay();
            // tempMat(cv::Rect(0,0,xdim,ydim)) = mainSubLocal->scaledAna;
            //tempMat(cv::Rect(xdim,0,xdim,ydim)) = mainSubLocal->scaledDig;
@@ -83,17 +83,18 @@ void movieDialog::on_pushButton_clicked()
 
            cv::convertScaleAbs(mainSubLocal->scaledAna, tempMat8bit(cv::Rect(0,0,xdim,ydim)), mainSubLocal->anaDisplayScale);
            cv::convertScaleAbs(mainSubLocal->scaledDig, tempMat8bit(cv::Rect(xdim,0,xdim,ydim)), mainSubLocal->digDisplayScale);
-           cv::convertScaleAbs(mainSubLocal->combined, tempMat8bit(cv::Rect(2*xdim,0,xdim,ydim)), mainSubLocal->comDisplayScale);
+           cv::convertScaleAbs(mainSubLocal->combined, tempMat8bit(cv::Rect(xdim,ydim,xdim,ydim)), mainSubLocal->comDisplayScale);
+           cv::convertScaleAbs(mainSubLocal->scaledGain, tempMat8bit(cv::Rect(0,ydim,xdim,ydim)), 200);
 
            // tempMat.convertTo(tempMat8bit, CV_8U);
            // vidWrite.write(tempMat8bit);
             //tempMat8bit.convertTo(tempMat8bitc3,CV_8UC3);
-           cv::resize(tempMat8bit,tempSized,cv::Size(),7,7);
+           cv::resize(tempMat8bit,tempSized,cv::Size(),7,7,cv::INTER_AREA);
 
             //vidWrite.write(tempMat8bit);
            vidWrite.write(tempSized);
 
-            cv::imshow("output video",tempMat8bit);
+            cv::imshow("output video",tempSized);
             cv::waitKey(1);
         }
 
