@@ -15,8 +15,8 @@ INCLUDEPATH += "D:\boost\boost_1_70_0"
 LIBS += -L"D:\boost\boost_1_70_0\stage\lib"
 
 #changing to new build 2019_07_31
-LIBS += -L"D:\opencv\sources\build\install\x64\vc16\lib"
-INCLUDEPATH += "D:\opencv\sources\build\install\include"
+LIBS += -L"D:\opencv\sources\build_release\install\x64\vc16\lib"
+INCLUDEPATH += "D:\opencv\sources\build_release\install\include"
 #LIBS += -L"D:\opencv\opencv_2019_07_30\opencv\build_release\install\x64\vc16\lib"
 #INCLUDEPATH += "D:\opencv\opencv_2019_07_30\opencv\build_release\install\include"
 
@@ -37,6 +37,7 @@ SOURCES += \
         calcdebounceoffsets.cpp \
         calibrationdialog.cpp \
         empad2lib.cpp \
+        eventdetectiondialog.cpp \
         histogramareadialog.cpp \
         histogramdialog.cpp \
         main.cpp \
@@ -50,6 +51,7 @@ HEADERS += \
         calcdebounceoffsets.h \
         calibrationdialog.h \
         empad2lib.h \
+        eventdetectiondialog.h \
         histogramareadialog.h \
         histogramdialog.h \
         mainwindow.h \
@@ -61,6 +63,7 @@ HEADERS += \
 FORMS += \
         calcdebounceoffsets.ui \
         calibrationdialog.ui \
+        eventdetectiondialog.ui \
         histogramareadialog.ui \
         histogramdialog.ui \
         mainwindow.ui \

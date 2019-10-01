@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>EMPAD Browser v0.10preBeta - Hugh Philipp</string>
+   <string>EMPAD Browser v0.11preBeta - Hugh Philipp</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QSlider" name="frameSlider">
@@ -615,6 +615,7 @@
     <addaction name="actionHistogram_Area"/>
     <addaction name="actionCalc_Debounce_Offsets"/>
     <addaction name="actionAdd_Frames"/>
+    <addaction name="actionEvent_Detection"/>
    </widget>
    <widget class="QMenu" name="menuExport">
     <property name="title">
@@ -758,6 +759,11 @@
   <action name="actionOdd_Calib_d_ADUlg_dDump_to_Results">
    <property name="text">
     <string>Odd Calib. d(ADUlg)/dDump to Results</string>
+   </property>
+  </action>
+  <action name="actionEvent_Detection">
+   <property name="text">
+    <string>Event Detection</string>
    </property>
   </action>
  </widget>

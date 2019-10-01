@@ -27,6 +27,10 @@ MainWindow::MainWindow(QWidget *parent) :
     gainMask    =   cv::Mat(128,128,CV_64F,cv::Scalar(0));
     notgainMask =   cv::Mat(128,128,CV_64F,cv::Scalar(0));
 
+    evDetect = 0;
+    evThresh = 500;
+    evConnex = 3;
+
     cv::namedWindow("analog", cv::WINDOW_NORMAL);
     cv::namedWindow("digital", cv::WINDOW_NORMAL);
     cv::namedWindow("combined",cv::WINDOW_NORMAL);
@@ -49,6 +53,7 @@ MainWindow::MainWindow(QWidget *parent) :
     calcOffsets = new CalcDebounceOffsets(this);
     sumFrames = new SumFramesDialog(this);
     calibDialog = new CalibrationDialog(this);
+    evDetectDialog = new EventDetectionDialog(this);
     offsets.clear();
     mousex = 0;
     mousey = 0;
@@ -405,6 +410,28 @@ void MainWindow::updateDisplay()
                     cv::convertScaleAbs(scaledGain,adjMap,200);
                     cv::imshow("gain",adjMap);
                 }
+            }
+
+            if(evDetect!=0)
+            {
+                cv::convertScaleAbs(combined,adjMap,comDisplayScale);
+                cv::threshold(adjMap,evImageTh,evThresh*comDisplayScale,1,0);
+                cv::connectedComponentsWithStats(evImageTh, evLabels, evStats, evCentroids);
+
+                for(int i=1; i<evStats.rows; i++)
+                {
+                      int x = evStats.at<int>(cv::Point(0, i));
+                      int y = evStats.at<int>(cv::Point(1, i));
+                      int w = evStats.at<int>(cv::Point(2, i));
+                      int h = evStats.at<int>(cv::Point(3, i));
+
+
+                      cv::Scalar color(255,0,0);
+                      cv::Rect rect(x,y,w,h);
+                      cv::rectangle(adjMap, rect, color);
+                 }
+                cv::imshow("combined",adjMap);
+
             }
     }
 
@@ -817,4 +844,9 @@ void MainWindow::on_checkBox_subOff_stateChanged(int arg1)
 {
     updateDisplay();
     updatePixelValue();
+}
+
+void MainWindow::on_actionEvent_Detection_triggered()
+{
+    evDetectDialog->show();
 }

@@ -11,10 +11,13 @@
 #include "calcdebounceoffsets.h"
 #include "sumframesdialog.h"
 #include "calibrationdialog.h"
-#include<opencv2/opencv.hpp>
-#include<opencv2/highgui.hpp>
+#include "eventdetectiondialog.h"
+#include <opencv2/opencv.hpp>
+#include <opencv2/highgui.hpp>
 #include <opencv2/imgproc.hpp>
 #include <opencv2/imgcodecs.hpp>
+#include <opencv2/objdetect.hpp>
+
 #include "empad2lib.h"
 #include <boost/filesystem.hpp>
 #include <boost/iostreams/device/mapped_file.hpp>
@@ -62,6 +65,13 @@ public:
     std::vector<double> offsetsCalib;
 
     int mousex,mousey;
+    int evDetect;
+    cv::Mat evLabels;
+    cv::Mat evStats;
+    cv::Mat evCentroids;
+    cv::Mat evImageTh;
+    double evThresh;
+    int evConnex;
 
     double anaDisplayScale,digDisplayScale,comDisplayScale;
     static void onMouseDig(int, int, int, int, void*);
@@ -147,6 +157,8 @@ private slots:
 
     void on_checkBox_subOff_stateChanged(int arg1);
 
+    void on_actionEvent_Detection_triggered();
+
 private:
     Ui::MainWindow *ui;
 
@@ -158,6 +170,7 @@ private:
     CalcDebounceOffsets *calcOffsets;
     SumFramesDialog *sumFrames;
     CalibrationDialog *calibDialog;
+    EventDetectionDialog *evDetectDialog;
 
     friend class HistogramDialog;
     friend class plotpixels;
@@ -166,6 +179,7 @@ private:
     friend class CalcDebounceOffsets;
     friend class SumFramesDialog;
     friend class CalibrationDialog;
+    friend class EventDetectionDialog;
 };
 
 #endif // MAINWINDOW_H
